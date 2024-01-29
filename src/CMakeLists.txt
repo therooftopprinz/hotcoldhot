@@ -21,14 +21,19 @@ target_include_directories(lvglsdl PUBLIC ${SDL2_INCLUDE_DIRS})
 set(LVGL_DIR "${PROJECT_DIR}/cpp_dependencies/lvgl")
 include(${LVGL_DIR}/CMakeLists.txt)
 
-
 # HOTCOLDHOT
 
 file(GLOB SRC
-"${PROJECT_DIR}/src/main.c"
-"${PROJECT_DIR}/src/example.c"
-"${PROJECT_DIR}/src/assets/*.c"
-)
+    "${PROJECT_DIR}/src/App.cpp"
+    "${PROJECT_DIR}/src/ui/UI.cpp"
+    "${PROJECT_DIR}/src/ui/gl/Button.cpp"
+    "${PROJECT_DIR}/src/ui/gl/Keyboard.cpp"
+    "${PROJECT_DIR}/src/ui/gl/Label.cpp"
+    "${PROJECT_DIR}/src/ui/gl/MessageBox.cpp"
+    "${PROJECT_DIR}/src/ui/gl/TabView.cpp"
+    "${PROJECT_DIR}/src/ui/gl/TextArea.cpp"
+    "${PROJECT_DIR}/src/ui/GlobalStyles.hpp"
+    "${PROJECT_DIR}/src/main.cpp")
 
 add_compile_options(-Wall -O2)
 add_executable(hotcoldhot ${SRC})

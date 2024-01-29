@@ -14,7 +14,7 @@ static lv_disp_draw_buf_t draw_buf;
 static int DISPLAY_WIDTH;
 static int DISPLAY_HEIGHT;
 #ifndef WINDOW_NAME
-#define WINDOW_NAME "LVGL"
+#define WINDOW_NAME "HotColdHot"
 #endif
 
 static void disp_flush(lv_disp_drv_t * disp_drv, const lv_area_t * area, lv_color_t * color_p)

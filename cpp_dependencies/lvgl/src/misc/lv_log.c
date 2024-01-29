@@ -100,8 +100,10 @@ void _lv_log_add(lv_log_level_t level, const char * file, int line, const char *
                         lvl_prefix[level], t / 1000, t % 1000, t - last_log_time, func, msg, &file[p], line);
 #else
             lv_vaformat_t vaf = {format, &args};
-            lv_snprintf(buf, sizeof(buf), "[%s]\t(%" LV_PRId32 ".%03" LV_PRId32 ", +%" LV_PRId32 ")\t %s: %pV \t(in %s line #%d)\n",
-                        lvl_prefix[level], t / 1000, t % 1000, t - last_log_time, func, (void *)&vaf, &file[p], line);
+            // lv_snprintf(buf, sizeof(buf), "[%s]\t(%" LV_PRId32 ".%03" LV_PRId32 ", +%" LV_PRId32 ")\t %s: %pV \t(in %s line #%d)\n",
+            //             lvl_prefix[level], t / 1000, t % 1000, t - last_log_time, func, (void *)&vaf, &file[p], line);
+            lv_snprintf(buf, sizeof(buf), "%" LV_PRId32 " %s %16s:%03d %24s: %pV\n",
+                        t, lvl_prefix[level], &file[p], line, func, (void *)&vaf);
 #endif
             custom_print_cb(buf);
         }
