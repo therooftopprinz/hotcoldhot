@@ -8,25 +8,17 @@
 namespace ui
 {
 
-struct ButtonData
-{
-    void* user_data = nullptr;
-    lv_event_cb_t on_click = nullptr;
-};
-
 struct Button : Object {};
-
 
 class ButtonBuilder
 {
 public:
     ButtonBuilder() = delete;
     ButtonBuilder(lv_obj_t* parent);
+    ButtonBuilder(lv_obj_t* parent, lv_event_cb_t cb,  void* user_data = nullptr, lv_event_code_t = LV_EVENT_CLICKED);
     Button* handle();
 
 private:
-    static void on_event(lv_event_t* e);
-
     Button* element = nullptr;
 };
 

@@ -62,4 +62,4 @@ inline const char* events[] = {
 
 } // namespace ui
 
-#endif __UI_LV_UTILS_HPP__
+#endif // __UI_LV_UTILS_HPP__

@@ -32,7 +32,7 @@ file(GLOB SRC
     "${PROJECT_DIR}/src/ui/gl/MessageBox.cpp"
     "${PROJECT_DIR}/src/ui/gl/TabView.cpp"
     "${PROJECT_DIR}/src/ui/gl/TextArea.cpp"
-    "${PROJECT_DIR}/src/ui/GlobalStyles.hpp"
+    "${PROJECT_DIR}/src/ui/GlobalStyles.cpp"
     "${PROJECT_DIR}/src/main.cpp")
 
 add_compile_options(-Wall -O2)

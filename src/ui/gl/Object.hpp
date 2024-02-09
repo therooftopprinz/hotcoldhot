@@ -33,6 +33,15 @@ struct Object : lv_obj_t
         lv_obj_add_event_cb(this, cb, event_code, event_data);
     }
 
+    void set_width(lv_coord_t width)
+    {
+        lv_obj_set_width(this, width);
+    }
+
+    void set_height(lv_coord_t height)
+    {
+        lv_obj_set_height(this, height);
+    }
 
     void set_content_width(lv_coord_t width)
     {
@@ -42,6 +51,21 @@ struct Object : lv_obj_t
     void set_content_height(lv_coord_t height)
     {
         lv_obj_set_content_width(this, height);
+    }
+
+    void add_style(lv_style_t* style, lv_style_selector_t selector)
+    {
+        lv_obj_add_style(this, style, selector);
+    }
+
+    void remove_style(lv_style_t* style, lv_style_selector_t selector)
+    {
+        lv_obj_remove_style(this, style, selector);
+    }
+
+    void set_style_pad_all(lv_coord_t value, lv_style_selector_t selector)
+    {
+        lv_obj_set_style_pad_all(this, value, selector);
     }
 };
 

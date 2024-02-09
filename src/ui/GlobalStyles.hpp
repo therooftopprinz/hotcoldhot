@@ -8,6 +8,7 @@ namespace ui
 
 extern lv_style_t style_nopadding;
 extern lv_style_t style_debug_border;
+extern lv_style_t style_container;
 
 void initGlobalStyles();
 
