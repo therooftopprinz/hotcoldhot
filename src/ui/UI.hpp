@@ -19,6 +19,8 @@
 namespace ui
 {
 
+class MenuProgram;
+
 class UI
 {
 public:

@@ -67,6 +67,21 @@ struct Object : lv_obj_t
     {
         lv_obj_set_style_pad_all(this, value, selector);
     }
+
+    void set_layout(uint32_t layout)
+    {
+        lv_obj_set_layout(this, layout);
+    }
+
+    void set_flex_flow(lv_flex_flow_t flow)
+    {
+        lv_obj_set_flex_flow(this, flow);
+    }
+
+    void* get_event_user_data(lv_event_cb_t cb)
+    {
+        return lv_obj_get_event_user_data(this, cb);
+    }
 };
 
 } // namespace ui
