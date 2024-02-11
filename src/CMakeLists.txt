@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.14)
 
 project(hotcoldhot LANGUAGES C CXX)
 
+SET(CMAKE_CXX_FLAGS_DEBUG "-ggdb3 -O0 -fno-inline-functions -fno-omit-frame-pointer")
+
 find_package(PkgConfig)
 pkg_check_modules(SDL2 REQUIRED sdl2)
 
@@ -22,7 +24,6 @@ set(LVGL_DIR "${PROJECT_DIR}/cpp_dependencies/lvgl")
 include(${LVGL_DIR}/CMakeLists.txt)
 
 # HOTCOLDHOT
-
 file(GLOB SRC
     "${PROJECT_DIR}/src/App.cpp"
     "${PROJECT_DIR}/src/ui/UI.cpp"

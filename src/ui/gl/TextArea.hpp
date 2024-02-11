@@ -22,7 +22,7 @@ class TextAreaBuilder
 {
 public:
     TextAreaBuilder() = delete;
-    TextAreaBuilder(lv_obj_t* parent, Keyboard*);
+    TextAreaBuilder(lv_obj_t* parent, bool, Keyboard*);
     TextArea* handle();
 
 private:

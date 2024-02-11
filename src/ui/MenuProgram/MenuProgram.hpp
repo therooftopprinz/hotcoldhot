@@ -28,10 +28,13 @@ public:
     void new_row();
     MenuProgram(TabView* parent);
 
-    static void on_event_append(lv_event_t* e);
-    static void on_event_play(lv_event_t* e);
-    static void on_event_stop(lv_event_t* e);
-    static void on_event_lock_change(lv_event_t* e);
+    static void onEventAppend(lv_event_t* e);
+    static void onEventInsertUp(lv_event_t* e);
+    static void onEventInsertDown(lv_event_t* e);
+    static void onEventDelete(lv_event_t* e);
+    static void onEventPlay(lv_event_t* e);
+    static void onEventStop(lv_event_t* e);
+    static void onEventLock(lv_event_t* e);
 
 private:
     friend class ProgramControlBuilder;
@@ -39,7 +42,7 @@ private:
     friend class ProgramListEntryBuilder;
 
     TabView* view = nullptr;
-    Tab* tab = nullptr;
+    Object* root = nullptr;
     Rect* programControl = nullptr;
     Rect* programList = nullptr;
 };

@@ -64,7 +64,9 @@ void UI::initInput()
 
 void UI::initUI()
 {
-    menu = TabViewBuilder(lv_scr_act(), LV_DIR_BOTTOM, CONFIG_SCREEN_LINE_HEIGHT).handle();
+    auto screen = (Object*) lv_scr_act();
+
+    menu = TabViewBuilder(screen, LV_DIR_BOTTOM, CONFIG_SCREEN_LINE_HEIGHT).handle();
 
     g_keyboard = KeyboardBuilder(lv_scr_act()).handle();
     g_keyboard->hide();

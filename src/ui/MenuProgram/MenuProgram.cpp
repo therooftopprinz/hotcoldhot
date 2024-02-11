@@ -5,22 +5,56 @@ namespace ui
 
 MenuProgram::MenuProgram(TabView* parent)
     : view(parent)
-    , tab (parent->add_tab("Program"))
 {
+    auto tab = parent->add_tab("Program");
     tab->add_style(&ui::style_container, LV_PART_MAIN | LV_STATE_DEFAULT);
-    // tab->set_layout(LV_LAYOUT_FLEX);
-    // tab->set_flex_flow(LV_FLEX_FLOW_COLUMN);
-    // LV_LAYOUT_
+
+    /*Create a container with grid*/
+    static lv_coord_t col_dsc[] = {
+                                    CONFIG_SCREEN_WIDTH,
+                                    LV_GRID_TEMPLATE_LAST};
+    static lv_coord_t row_dsc[] = {
+                                    CONFIG_SCREEN_LINE_HEIGHT,
+                                    CONFIG_SCREEN_HEIGHT - 2*CONFIG_SCREEN_LINE_HEIGHT,
+                                    LV_GRID_TEMPLATE_LAST};
+
+    root = (Object*) lv_obj_create(tab);
+    root->set_width(CONFIG_SCREEN_WIDTH);
+    root->set_height(CONFIG_SCREEN_HEIGHT - CONFIG_SCREEN_LINE_HEIGHT);
+
+    root->add_style(&ui::style_container, LV_STATE_DEFAULT);
+    root->set_style_bg_color(lv_color_make(150, 150, 150));
+    root->set_style_pad_column(0);
+    root->set_style_pad_row(0);
+
+    lv_obj_set_grid_dsc_array(root, col_dsc, row_dsc);
+    lv_obj_center(root);
 
     ProgramControlBuilder{this};
-    // ProgramListBuilder{this};
+    ProgramListBuilder{this};
+
+    lv_obj_set_grid_cell(programControl, LV_GRID_ALIGN_START , 0, 1, LV_GRID_ALIGN_START , 0, 1);
+    lv_obj_set_grid_cell(programList,    LV_GRID_ALIGN_START , 0, 1, LV_GRID_ALIGN_START , 1, 1);
 }
 
-void MenuProgram::on_event_append(lv_event_t* e)
+void MenuProgram::onEventDelete(lv_event_t* e)
 {
     lv_event_code_t code = lv_event_get_code(e);
     auto obj = (Object*) lv_event_get_current_target(e);
-    auto this_ = (MenuProgram*) obj->get_event_user_data(&MenuProgram::on_event_append);
+    auto this_ = (MenuProgram*) obj->get_event_user_data(&MenuProgram::onEventAppend);
+
+    if(LV_EVENT_CLICKED == code)
+    {
+        LV_LOG_TRACE("deleting obj=%p", obj);
+        obj->get_parent()->delete_sync();
+    }
+}
+
+void MenuProgram::onEventAppend(lv_event_t* e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
+    auto obj = (Object*) lv_event_get_current_target(e);
+    auto this_ = (MenuProgram*) obj->get_event_user_data(&MenuProgram::onEventAppend);
 
     if(LV_EVENT_CLICKED == code)
     {
@@ -28,13 +62,49 @@ void MenuProgram::on_event_append(lv_event_t* e)
     }
 }
 
-void MenuProgram::on_event_play(lv_event_t* e)
+void MenuProgram::onEventInsertUp(lv_event_t* e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
+    auto obj = (Object*) lv_event_get_current_target(e);
+    auto this_ = (MenuProgram*) obj->get_event_user_data(&MenuProgram::onEventInsertUp);
+
+    if(LV_EVENT_CLICKED == code)
+    {
+        ProgramListEntryBuilder{this_};
+        auto list = this_->programList;
+        auto n = list->get_child_cnt();
+        auto i = obj->get_index();
+        auto inserted = obj->get_child(n-1);
+        inserted->move_to_index(i);
+        LV_LOG_TRACE("moving %d to %d", n-1, i);
+    }
+}
+
+void MenuProgram::onEventInsertDown(lv_event_t* e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
+    auto obj = (Object*) lv_event_get_current_target(e);
+    auto this_ = (MenuProgram*) obj->get_event_user_data(&MenuProgram::onEventInsertDown);
+
+    if(LV_EVENT_CLICKED == code)
+    {
+        ProgramListEntryBuilder{this_};
+        auto list = this_->programList;
+        auto n = list->get_child_cnt();
+        auto i = obj->get_index();
+        auto inserted = obj->get_child(n-1);
+        inserted->move_to_index(i+1);
+        LV_LOG_TRACE("moving %d to %d", n-1, i);
+    }
+}
+
+void MenuProgram::onEventPlay(lv_event_t* e)
 {}
 
-void MenuProgram::on_event_stop(lv_event_t* e)
+void MenuProgram::onEventStop(lv_event_t* e)
 {}
 
-void MenuProgram::on_event_lock_change(lv_event_t* e)
+void MenuProgram::onEventLock(lv_event_t* e)
 {}
 
 } // namespace ui

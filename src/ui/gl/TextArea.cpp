@@ -4,13 +4,14 @@
 namespace ui
 {
 
-TextAreaBuilder::TextAreaBuilder(lv_obj_t* parent, Keyboard* kb)
+TextAreaBuilder::TextAreaBuilder(lv_obj_t* parent, bool isSingleLine, Keyboard* kb)
     : element((TextArea*)lv_textarea_create(parent))
 {
     auto data = new TextAreaData;
     data->kb = kb;
     element->set_user_data(data);
     element->add_event_handler(on_event, LV_EVENT_ALL);
+    lv_textarea_set_one_line(element, isSingleLine);
 }
 
 TextArea* TextAreaBuilder::handle()
