@@ -1,10 +1,15 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.5)
 project("HotColdHot")
 
-SET(CMAKE_CXX_FLAGS_DEBUG "-ggdb3 -O0 -fno-inline-functions -fno-omit-frame-pointer")
-SET(CMAKE_C_FLAGS_DEBUG "-ggdb3 -O0 -fno-inline-functions -fno-omit-frame-pointer")
-
-
 set(CMAKE_VERBOSE_MAKEFILE ON)
+option(SIM_LINUX "Build simulated enviroment on Linux" OFF)
 
-add_subdirectory(${CMAKE_SOURCE_DIR}/main)
+if(SIM_LINUX)
+    SET(CMAKE_CXX_FLAGS_DEBUG "-ggdb3 -O0 -fno-inline-functions -fno-omit-frame-pointer")
+    SET(CMAKE_C_FLAGS_DEBUG "-ggdb3 -O0 -fno-inline-functions -fno-omit-frame-pointer")
+    add_subdirectory(${CMAKE_SOURCE_DIR}/main)
+else()
+    include($ENV{IDF_PATH}/tools/cmake/project.cmake)
+    set(PROJECT_ELF ${project_elf})
+    target_compile_options(${PROJECT_ELF} PRIVATE -Wno-missing-braces -Wmissing-field-initializers)
+endif()
