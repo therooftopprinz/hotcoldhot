@@ -2,8 +2,6 @@ cmake_minimum_required(VERSION 3.14)
 
 project(hotcoldhot LANGUAGES C CXX)
 
-SET(CMAKE_CXX_FLAGS_DEBUG "-ggdb3 -O0 -fno-inline-functions -fno-omit-frame-pointer")
-
 find_package(PkgConfig)
 pkg_check_modules(SDL2 REQUIRED sdl2)
 
@@ -38,7 +36,7 @@ file(GLOB SRC
     "${PROJECT_DIR}/src/ui/MenuProgram/ProgramBuilder.cpp"
     "${PROJECT_DIR}/src/main.cpp")
 
-add_compile_options(-Wall -O2)
+add_compile_options(-Wall)
 add_executable(hotcoldhot ${SRC})
 
 include_directories(${LVDRV_DIR})

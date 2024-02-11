@@ -42,6 +42,9 @@ class ProgramListEntryBuilder
 public:
     ProgramListEntryBuilder() = delete;
     ProgramListEntryBuilder(MenuProgram*);
+    Rect* handle();
+private:
+    Rect* element;
 };
 
 } // namespace ui

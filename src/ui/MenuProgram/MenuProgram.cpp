@@ -40,12 +40,11 @@ MenuProgram::MenuProgram(TabView* parent)
 void MenuProgram::onEventDelete(lv_event_t* e)
 {
     lv_event_code_t code = lv_event_get_code(e);
-    auto obj = (Object*) lv_event_get_current_target(e);
+    auto obj = (Object*) lv_event_get_target(e);
     auto this_ = (MenuProgram*) obj->get_event_user_data(&MenuProgram::onEventAppend);
 
     if(LV_EVENT_CLICKED == code)
     {
-        LV_LOG_TRACE("deleting obj=%p", obj);
         obj->get_parent()->delete_sync();
     }
 }
@@ -53,7 +52,7 @@ void MenuProgram::onEventDelete(lv_event_t* e)
 void MenuProgram::onEventAppend(lv_event_t* e)
 {
     lv_event_code_t code = lv_event_get_code(e);
-    auto obj = (Object*) lv_event_get_current_target(e);
+    auto obj = (Object*) lv_event_get_target(e);
     auto this_ = (MenuProgram*) obj->get_event_user_data(&MenuProgram::onEventAppend);
 
     if(LV_EVENT_CLICKED == code)
@@ -65,36 +64,46 @@ void MenuProgram::onEventAppend(lv_event_t* e)
 void MenuProgram::onEventInsertUp(lv_event_t* e)
 {
     lv_event_code_t code = lv_event_get_code(e);
-    auto obj = (Object*) lv_event_get_current_target(e);
+    auto obj = (Object*) lv_event_get_target(e);
     auto this_ = (MenuProgram*) obj->get_event_user_data(&MenuProgram::onEventInsertUp);
+    auto event_list_entry = obj->get_parent();
 
     if(LV_EVENT_CLICKED == code)
     {
-        ProgramListEntryBuilder{this_};
-        auto list = this_->programList;
-        auto n = list->get_child_cnt();
-        auto i = obj->get_index();
-        auto inserted = obj->get_child(n-1);
-        inserted->move_to_index(i);
-        LV_LOG_TRACE("moving %d to %d", n-1, i);
+        auto i = event_list_entry->get_index();
+        ProgramListEntryBuilder(this_).handle()->move_to_index(i);
     }
 }
 
 void MenuProgram::onEventInsertDown(lv_event_t* e)
 {
     lv_event_code_t code = lv_event_get_code(e);
-    auto obj = (Object*) lv_event_get_current_target(e);
+    auto obj = (Object*) lv_event_get_target(e);
     auto this_ = (MenuProgram*) obj->get_event_user_data(&MenuProgram::onEventInsertDown);
+    auto event_list_entry = obj->get_parent();
 
     if(LV_EVENT_CLICKED == code)
     {
-        ProgramListEntryBuilder{this_};
+        auto i = event_list_entry->get_index();
+        ProgramListEntryBuilder(this_).handle()->move_to_index(i+1);
+    }
+}
+
+void MenuProgram::onEventDebug(lv_event_t* e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
+    auto obj = (Object*) lv_event_get_target(e);
+    auto this_ = (MenuProgram*) obj->get_event_user_data(&MenuProgram::onEventDebug);
+
+    if(LV_EVENT_CLICKED == code)
+    {
         auto list = this_->programList;
-        auto n = list->get_child_cnt();
-        auto i = obj->get_index();
-        auto inserted = obj->get_child(n-1);
-        inserted->move_to_index(i+1);
-        LV_LOG_TRACE("moving %d to %d", n-1, i);
+        auto N = list->get_child_cnt();
+        for (uint32_t i=0; i<N; i++)
+        {
+            auto child = list->get_child(i);
+            LV_LOG_USER("list[%u]: index=%u pointer=%p", i, child->get_index(), child);
+        }
     }
 }
 

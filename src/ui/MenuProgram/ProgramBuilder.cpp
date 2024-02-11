@@ -24,6 +24,7 @@ ProgramControlBuilder::ProgramControlBuilder(MenuProgram* menu_program)
     ButtonBuilder(element, LV_SYMBOL_PLUS, &MenuProgram::onEventAppend, menu_program).handle();
     ButtonBuilder(element, LV_SYMBOL_PLAY, &MenuProgram::onEventPlay, menu_program).handle();
     ButtonBuilder(element, LV_SYMBOL_STOP, &MenuProgram::onEventStop, menu_program).handle();
+    ButtonBuilder(element, LV_SYMBOL_EYE_OPEN, &MenuProgram::onEventDebug, menu_program).handle();
 }
 
 ProgramListBuilder::ProgramListBuilder(MenuProgram* menu_program)
@@ -48,7 +49,7 @@ ProgramListBuilder::ProgramListBuilder(MenuProgram* menu_program)
 ProgramListEntryBuilder::ProgramListEntryBuilder(MenuProgram* menu_program)
 {
     auto parent = menu_program->programList;
-    auto element = RectBuilder(parent).handle();
+    element = RectBuilder(parent).handle();
 
     element->set_width(CONFIG_SCREEN_WIDTH);
     element->set_height(CONFIG_SCREEN_LINE_HEIGHT);
@@ -60,9 +61,9 @@ ProgramListEntryBuilder::ProgramListEntryBuilder(MenuProgram* menu_program)
     element->set_style_pad_column(2);
     element->set_style_pad_row(0);
 
-    ButtonBuilder(element, LV_SYMBOL_LIST,  &MenuProgram::onEventInsertUp, menu_program).handle();
-    ButtonBuilder(element, LV_SYMBOL_UP,    &MenuProgram::onEventInsertDown, menu_program).handle();
-    ButtonBuilder(element, LV_SYMBOL_DOWN,  nullptr, menu_program).handle();
+    ButtonBuilder(element, LV_SYMBOL_LIST,  nullptr, menu_program).handle();
+    ButtonBuilder(element, LV_SYMBOL_UP,    &MenuProgram::onEventInsertUp, menu_program).handle();
+    ButtonBuilder(element, LV_SYMBOL_DOWN,  &MenuProgram::onEventInsertDown, menu_program).handle();
     ButtonBuilder(element, LV_SYMBOL_TRASH,  &MenuProgram::onEventDelete, menu_program).handle();
 
     auto temp_input = TextAreaBuilder(element, true, g_keypad).handle();
@@ -77,7 +78,11 @@ ProgramListEntryBuilder::ProgramListEntryBuilder(MenuProgram* menu_program)
     LabelBuilder(element, "s ");
 
     ButtonBuilder(element, LV_SYMBOL_PLAY, nullptr, menu_program).handle();
-   
+}
+
+Rect* ProgramListEntryBuilder::handle()
+{
+    return element;
 }
 
 

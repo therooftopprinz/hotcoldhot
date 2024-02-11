@@ -35,6 +35,7 @@ public:
     static void onEventPlay(lv_event_t* e);
     static void onEventStop(lv_event_t* e);
     static void onEventLock(lv_event_t* e);
+    static void onEventDebug(lv_event_t* e);
 
 private:
     friend class ProgramControlBuilder;
