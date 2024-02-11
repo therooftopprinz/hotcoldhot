@@ -7,4 +7,4 @@ SET(CMAKE_C_FLAGS_DEBUG "-ggdb3 -O0 -fno-inline-functions -fno-omit-frame-pointe
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
-add_subdirectory(${CMAKE_SOURCE_DIR}/src)
+add_subdirectory(${CMAKE_SOURCE_DIR}/main)
