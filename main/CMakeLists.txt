@@ -1,9 +1,7 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.16)
 
-project(hot_cold_hot)
-
-if(SIM_LINUX)
-    include(${CMAKE_SOURCE_DIR}/main/cmake_sim_linux.cmake)
-else()
+if(ESP_PLATFORM)
     include(${CMAKE_SOURCE_DIR}/main/cmake_idf.cmake)
+else()
+    include(${CMAKE_SOURCE_DIR}/main/cmake_sim_linux.cmake)
 endif()

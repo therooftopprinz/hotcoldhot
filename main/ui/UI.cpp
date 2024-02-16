@@ -76,6 +76,9 @@ void UI::initUI()
     g_keypad->hide();
 
     menu_program = std::make_unique<MenuProgram>(menu);
+    menu->add_tab("Status");
+    menu->add_tab("Settings");
+    menu->add_tab("Help");
 
     MessageBoxBuilder(group)
         .title("Welcome!")

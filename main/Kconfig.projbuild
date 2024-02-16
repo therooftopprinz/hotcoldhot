@@ -1,0 +1,12 @@
+menu "TempSense Configuration"
+
+    config ONE_WIRE_GPIO
+        int "OneWire GPIO number"
+        range 0 33
+        default 4
+        help
+            GPIO number (IOxx) to access One Wire Bus.
+            Some GPIOs are used for other purposes (flash connections, etc.) and cannot be used.
+            GPIOs 34-39 are input-only so cannot be used to drive the One Wire Bus.
+    
+endmenu
