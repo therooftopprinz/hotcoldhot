@@ -1,0 +1,31 @@
+XBE_TITLE = lvgl_demo
+GEN_XISO = $(XBE_TITLE).iso
+NXDK_SDL = y
+
+# Edit these for your project
+LVGL_DIR = ../lvgl
+LVGL_DRV_DIR = ../lvgl_drv
+LV_CONF_PATH = "../lv_conf.h"
+
+# Edit these for your project
+SRCS += \
+	main.c \
+	example.c
+
+# Edit these for your project
+CFLAGS += -I$(CURDIR) -O2 
+
+# Include LVGL main library
+include $(LVGL_DIR)/lvgl.mk
+SRCS +=	\
+	$(LVGL_DRV_DIR)/lv_port_indev.c) \
+	$(LVGL_DRV_DIR)/lv_xbox_disp.c) \
+	$(wildcard assets/*.c) \
+	$(CSRCS)
+CFLAGS += \
+	-I$(LVGL_DIR)/ \
+	-I$(LVGL_DIR)/src/ \
+	-I$(LVGL_DRV_DIR)/ \
+	-DWIN32 -DLV_LVGL_H_INCLUDE_SIMPLE -DLV_CONF_PATH=$(LV_CONF_PATH)
+
+include $(NXDK_DIR)/Makefile
