@@ -1,7 +1,7 @@
 #include "App.hpp"
 
-extern "C" void setup();
-extern "C" void loop();
+void setup();
+void loop();
 
 int main(int argc, char *argv[])
 {

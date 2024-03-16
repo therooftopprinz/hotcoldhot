@@ -4,14 +4,23 @@
 namespace ui
 {
 
-TextAreaBuilder::TextAreaBuilder(lv_obj_t* parent, bool isSingleLine, Keyboard* kb)
+TextAreaBuilder::TextAreaBuilder(lv_obj_t* parent, unsigned width, unsigned height, Keyboard* kb, bool should_hide_keyboard)
     : element((TextArea*)lv_textarea_create(parent))
 {
     auto data = new TextAreaData;
     data->kb = kb;
+    data->should_hide_keyboard = should_hide_keyboard;
     element->set_user_data(data);
     element->add_event_handler(on_event, LV_EVENT_ALL);
-    lv_textarea_set_one_line(element, isSingleLine);
+    if (!height)
+    {
+        lv_textarea_set_one_line(element, true);
+    }
+    else
+    {
+        element->set_height(height);
+    }
+    element->set_width(width);
 }
 
 TextArea* TextAreaBuilder::handle()
@@ -34,7 +43,10 @@ void TextAreaBuilder::on_event(lv_event_t* e)
             || LV_EVENT_CANCEL  == code)
      {
         ta_data->kb->set_textarea(nullptr);
-        ta_data->kb->hide();
+        if (ta_data->should_hide_keyboard)
+        {
+            ta_data->kb->hide();
+        }
     }
     else if (LV_EVENT_DELETE == code)
     {

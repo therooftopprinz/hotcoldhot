@@ -1,5 +1,10 @@
 #include <config.h>
 
+extern "C"
+{
+#include <display_manager.h>
+}
+
 #include "UI.hpp"
 
 namespace ui
@@ -18,28 +23,23 @@ UI::UI()
     lv_log_register_print_cb(_log_cb);
 
     LV_LOG_INFO("Initializing UI...");
-    lv_init();
-    lv_port_disp_init(CONFIG_SCREEN_WIDTH, CONFIG_SCREEN_HEIGHT);
-    lv_port_indev_init();
+
+    display_manager_init();
 
     initGlobalStyles();
     initInput();
     initUI();
+
 }
 
 void UI::loop()
 {
-    if (lv_get_quit() == LV_QUIT_NONE)
-    {
-        lv_task_handler();
-    }
+    lv_task_handler();
 }
 
 UI::~UI()
 {
-    lv_port_disp_deinit();
-    lv_port_indev_deinit();
-    lv_deinit();
+    display_manager_deinit();
 }
 
 void UI::initInput()
@@ -67,8 +67,10 @@ void UI::initUI()
     auto screen = (Object*) lv_scr_act();
 
     menu = TabViewBuilder(screen, LV_DIR_BOTTOM, CONFIG_SCREEN_LINE_HEIGHT).handle();
+    lv_obj_set_scrollbar_mode(menu, LV_SCROLLBAR_MODE_OFF);
 
     menu_program = std::make_unique<MenuProgram>(menu);
+
     menu->add_tab("Status");
     menu->add_tab("Settings");
     menu->add_tab("Help");

@@ -6,8 +6,6 @@
 #include <cstdio>
 
 #include "lvgl.h"
-#include "lv_port_disp.h"
-#include "lv_port_indev.h"
 
 #include <ui/gl/Keyboard.hpp>
 #include <ui/gl/TabView.hpp>
@@ -28,7 +26,6 @@ public:
     ~UI();
     void loop();
 private:
-    void initStyles();
     void initInput();
     void initUI();
 

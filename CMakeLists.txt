@@ -39,7 +39,8 @@ file(GLOB SRC
     "${PROJECT_DIR}/src/ui/MenuProgram/MenuProgram.cpp"
     "${PROJECT_DIR}/src/ui/MenuProgram/ProgramBuilder.cpp"
     "${PROJECT_DIR}/src/arduino.cpp"
-    "${PROJECT_DIR}/sim_components/main.cpp")
+    "${PROJECT_DIR}/sim_components/main.cpp"
+    "${PROJECT_DIR}/sim_components/display_manager/src/display_manager.c")
 
 add_compile_options(-Wall)
 add_executable(hotcoldhot ${SRC})
@@ -49,6 +50,7 @@ include_directories(${LVGL_DIR})
 include_directories(${PROJECT_DIR})
 include_directories(${PROJECT_DIR}/src)
 include_directories(${PROJECT_DIR}/sim_components)
+include_directories(${PROJECT_DIR}/lib/display_manager/src)
 
 target_include_directories(hotcoldhot PUBLIC ${SDL2_INCLUDE_DIRS})
 target_compile_options(hotcoldhot PUBLIC ${SDL2_CFLAGS_OTHER})

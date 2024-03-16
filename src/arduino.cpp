@@ -3,12 +3,12 @@
 
 std::unique_ptr<App> g_app;
 
-extern "C" void setup()
+void setup()
 {
     g_app = std::make_unique<App>();
 }
 
-extern "C" void loop()
+void loop()
 {
     g_app->loop();
 }

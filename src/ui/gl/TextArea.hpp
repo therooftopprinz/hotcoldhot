@@ -14,6 +14,7 @@ struct Keyboard;
 struct TextAreaData
 {
     Keyboard* kb = nullptr;
+    bool should_hide_keyboard = true;
 };
 
 struct TextArea : Object {};
@@ -22,7 +23,7 @@ class TextAreaBuilder
 {
 public:
     TextAreaBuilder() = delete;
-    TextAreaBuilder(lv_obj_t* parent, bool, Keyboard*);
+    TextAreaBuilder(lv_obj_t* parent, unsigned, unsigned, Keyboard*, bool=true);
     TextArea* handle();
 
 private:
