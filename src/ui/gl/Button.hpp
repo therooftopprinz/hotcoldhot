@@ -4,11 +4,15 @@
 #include "lvgl.h"
 
 #include "Object.hpp"
+#include "Label.hpp"
 
 namespace ui
 {
 
-struct Button : Object {};
+struct Button : Object
+{
+    Label* getLabel();
+};
 
 class ButtonBuilder
 {

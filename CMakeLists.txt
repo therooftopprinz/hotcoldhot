@@ -1,9 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
 
-
-SET(CMAKE_CXX_FLAGS_DEBUG "-ggdb3 -O0 -fno-inline-functions -fno-omit-frame-pointer")
-SET(CMAKE_C_FLAGS_DEBUG "-ggdb3 -O0 -fno-inline-functions -fno-omit-frame-pointer")
-
 project(hotcoldhot LANGUAGES C CXX)
 
 find_package(PkgConfig)
@@ -36,13 +32,20 @@ file(GLOB SRC
     "${PROJECT_DIR}/src/ui/gl/TabView.cpp"
     "${PROJECT_DIR}/src/ui/gl/TextArea.cpp"
     "${PROJECT_DIR}/src/ui/GlobalStyles.cpp"
-    "${PROJECT_DIR}/src/ui/MenuProgram/MenuProgram.cpp"
-    "${PROJECT_DIR}/src/ui/MenuProgram/ProgramBuilder.cpp"
+    "${PROJECT_DIR}/src/ui/menu/MenuProgram.cpp"
+    "${PROJECT_DIR}/src/ui/menu/MenuRun.cpp"
     "${PROJECT_DIR}/src/arduino.cpp"
     "${PROJECT_DIR}/sim_components/main.cpp"
-    "${PROJECT_DIR}/sim_components/display_manager/src/display_manager.c")
+    "${PROJECT_DIR}/sim_components/display_manager/src/display_manager.c"
+    "${PROJECT_DIR}/sim_components/storage_manager/src/storage_manager.c"
+    "${PROJECT_DIR}/sim_components/board_devices/src/storage_manager.cpp")
 
-add_compile_options(-Wall)
+
+
+SET(CMAKE_CXX_FLAGS_DEBUG "-ggdb3 -O0 -fno-inline-functions -fno-omit-frame-pointer")
+SET(CMAKE_C_FLAGS_DEBUG   "-ggdb3 -O0 -fno-inline-functions -fno-omit-frame-pointer")
+
+# add_compile_options(-Wall)
 add_executable(hotcoldhot ${SRC})
 
 include_directories(${LVDRV_DIR})
@@ -51,6 +54,8 @@ include_directories(${PROJECT_DIR})
 include_directories(${PROJECT_DIR}/src)
 include_directories(${PROJECT_DIR}/sim_components)
 include_directories(${PROJECT_DIR}/lib/display_manager/src)
+include_directories(${PROJECT_DIR}/lib/storage_manager/src)
+include_directories(${PROJECT_DIR}/lib/board_devices/src)
 
 target_include_directories(hotcoldhot PUBLIC ${SDL2_INCLUDE_DIRS})
 target_compile_options(hotcoldhot PUBLIC ${SDL2_CFLAGS_OTHER})

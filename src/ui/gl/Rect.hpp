@@ -24,7 +24,6 @@ public:
     }
 
 private:
-    static void on_event(lv_event_t* e);
     Rect* element = nullptr;
 };
 

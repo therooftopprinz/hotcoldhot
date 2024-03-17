@@ -21,16 +21,19 @@
 namespace ui
 {
 
+class UI;
 class MenuProgram
 {
 public:
-    void new_row();
-    MenuProgram(TabView* parent);
-
+    MenuProgram(UI&,TabView* parent);
+    std::pair<bool, IApp::program_t> validate();
 private:
-
+    UI& ui;
     TabView* view = nullptr;
     Object* root = nullptr;
+    TextArea* inTemp[5] = {nullptr,nullptr,nullptr,nullptr,nullptr};
+    TextArea* inTime[5] = {nullptr,nullptr,nullptr,nullptr,nullptr};
+    TextArea* inCount = nullptr;
 };
 
 } // namespace ui

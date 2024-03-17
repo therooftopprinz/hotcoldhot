@@ -11,9 +11,12 @@ namespace ui
 struct Tab : Object{};
 struct TabView : Object
 {
-    Tab* add_tab( const char* name)
+    Tab* addTab( const char* name);
+
+    template<typename T>
+    T* getContent()
     {
-        return (Tab*) lv_tabview_add_tab(this, name);
+        return (T*) lv_tabview_get_content(this);
     }
 };
 
@@ -25,7 +28,6 @@ public:
     TabView* handle();
 
 private:
-    static void on_event(lv_event_t* e);
     TabView* element = nullptr;
 };
 

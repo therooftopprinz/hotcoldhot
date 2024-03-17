@@ -3,12 +3,12 @@
 namespace ui
 {
 
-void Keyboard::set_mode(lv_keyboard_mode_t mode)
+void Keyboard::setMode(lv_keyboard_mode_t mode)
 {
     lv_keyboard_set_mode(this, mode);
 }
 
-void Keyboard::set_textarea(TextArea* ta)
+void Keyboard::setTextarea(TextArea* ta)
 {
     lv_keyboard_set_textarea(this, ta);
 }

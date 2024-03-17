@@ -1,10 +1,5 @@
 #include <config.h>
 
-extern "C"
-{
-#include <display_manager.h>
-}
-
 #include "UI.hpp"
 
 namespace ui
@@ -18,13 +13,12 @@ void _log_cb(const char *buf)
     fflush(stdout);
 }
 
-UI::UI()
+UI::UI(IApp& app)
+    : app(app)
 {
     lv_log_register_print_cb(_log_cb);
 
     LV_LOG_INFO("Initializing UI...");
-
-    display_manager_init();
 
     initGlobalStyles();
     initInput();
@@ -39,7 +33,6 @@ void UI::loop()
 
 UI::~UI()
 {
-    display_manager_deinit();
 }
 
 void UI::initInput()
@@ -51,7 +44,7 @@ void UI::initInput()
 
     while (cur_drv)
     {
-        auto type = cur_drv->driver->type;
+        [[maybe_unused]] auto type = cur_drv->driver->type;
         LV_LOG_INFO("indev: %d", type);
         if(cur_drv->driver->type == LV_INDEV_TYPE_KEYPAD)
         {
@@ -66,20 +59,43 @@ void UI::initUI()
 {
     auto screen = (Object*) lv_scr_act();
 
-    menu = TabViewBuilder(screen, LV_DIR_BOTTOM, CONFIG_SCREEN_LINE_HEIGHT).handle();
+    menu = TabViewBuilder(screen, LV_DIR_BOTTOM, CONFIG_SCREEN_LINE_HEIGHT - RPAD).handle();
     lv_obj_set_scrollbar_mode(menu, LV_SCROLLBAR_MODE_OFF);
 
-    menu_program = std::make_unique<MenuProgram>(menu);
+    auto menu_cnt = menu->getContent<Object>();
+    menu_cnt->setWidth(CONFIG_SCREEN_WIDTH);
+    menu_cnt->setHeight(CONFIG_SCREEN_HEIGHT-CONFIG_SCREEN_LINE_HEIGHT - RPAD);
+    menu_cnt->setStylePadAll(5);
+    menu_cnt->clearFlag(LV_OBJ_FLAG_SCROLLABLE);
+    // lv_obj_set_style_border_width(menu_cnt, 1, LV_STATE_DEFAULT);
+    // lv_obj_set_style_border_color(menu_cnt, lv_color_hex(0xFF0000), LV_STATE_DEFAULT);
 
-    menu->add_tab("Status");
-    menu->add_tab("Settings");
-    menu->add_tab("Help");
+    menu_run = std::make_unique<MenuRun>(*this, menu);
+    menu_program = std::make_unique<MenuProgram>(*this, menu);
+    menu->addTab("Settings");
+    menu->addTab("Help");
 
     MessageBoxBuilder(group)
         .title("Welcome!")
         .text("Please see help to documentation!")
         .buttons(MessageBoxBuilder::BUTTONS_OK)
         .show();
+}
+
+std::pair<bool, IApp::program_t> UI::validate()
+{
+    return menu_program->validate();
+}
+
+void UI::start()
+{}
+
+void UI::stop()
+{}
+
+lv_group_t* UI::getGroup()
+{
+    return group;
 }
 
 } // namespace ui

@@ -15,5 +15,5 @@ void display_manager_deinit()
 {
     lv_port_disp_deinit();
     lv_port_indev_deinit();
-    lv_deinit();
+    // lv_deinit();
 }

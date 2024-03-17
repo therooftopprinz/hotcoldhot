@@ -17,7 +17,10 @@ struct TextAreaData
     bool should_hide_keyboard = true;
 };
 
-struct TextArea : Object {};
+struct TextArea : Object
+{
+    const char* getText();
+};
 
 class TextAreaBuilder
 {
@@ -27,7 +30,7 @@ public:
     TextArea* handle();
 
 private:
-    static void on_event(lv_event_t* e);
+    static void onEvent(lv_event_t* e);
     TextArea* element = nullptr;
 };
 

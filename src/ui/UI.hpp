@@ -4,6 +4,7 @@
 #include <list>
 #include <memory>
 #include <cstdio>
+#include <functional>
 
 #include "lvgl.h"
 
@@ -11,27 +12,43 @@
 #include <ui/gl/TabView.hpp>
 #include <ui/gl/MessageBox.hpp>
 
-#include "MenuProgram/MenuProgram.hpp"
+#include <IApp.hpp>
+
+#include "menu/MenuProgram.hpp"
+#include "menu/MenuRun.hpp"
 #include "GlobalStyles.hpp"
 
 namespace ui
 {
 
+constexpr auto CPAD = 5;
+constexpr auto RPAD = 5;
+
 class MenuProgram;
+class MenuRun;
 
 class UI
 {
 public:
-    UI();
+    UI(IApp&);
     ~UI();
     void loop();
+
+    std::pair<bool,IApp::program_t> validate();
+    void start();
+    void stop();
+    lv_group_t* getGroup();
+
 private:
     void initInput();
     void initUI();
 
+    IApp& app;
+
     lv_group_t* group = nullptr;
     TabView* menu = nullptr;
     std::unique_ptr<MenuProgram> menu_program;
+    std::unique_ptr<MenuRun> menu_run;
 };
 
 } // namespace ui

@@ -13,8 +13,8 @@ struct TextArea;
 
 struct Keyboard : Object
 {
-    void set_mode(lv_keyboard_mode_t);
-    void set_textarea(TextArea*);
+    void setMode(lv_keyboard_mode_t);
+    void setTextarea(TextArea*);
 };
 
 class KeyboardBuilder

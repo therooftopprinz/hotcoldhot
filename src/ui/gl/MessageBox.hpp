@@ -18,7 +18,7 @@ public:
     static const char* BUTTONS_OK[2];
 
 private:
-    static void on_event(lv_event_t* e);
+    static void onEvent(lv_event_t* e);
 
     lv_group_t* m_group = nullptr;
     const char* m_title = nullptr;
