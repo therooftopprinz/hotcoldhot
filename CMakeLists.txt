@@ -38,9 +38,7 @@ file(GLOB SRC
     "${PROJECT_DIR}/sim_components/main.cpp"
     "${PROJECT_DIR}/sim_components/display_manager/src/display_manager.c"
     "${PROJECT_DIR}/sim_components/storage_manager/src/storage_manager.c"
-    "${PROJECT_DIR}/sim_components/board_devices/src/storage_manager.cpp")
-
-
+    "${PROJECT_DIR}/sim_components/board_devices/src/board_devices.cpp")
 
 SET(CMAKE_CXX_FLAGS_DEBUG "-ggdb3 -O0 -fno-inline-functions -fno-omit-frame-pointer")
 SET(CMAKE_C_FLAGS_DEBUG   "-ggdb3 -O0 -fno-inline-functions -fno-omit-frame-pointer")

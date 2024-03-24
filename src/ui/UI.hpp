@@ -35,7 +35,7 @@ public:
     void loop();
 
     std::pair<bool,IApp::program_t> validate();
-    void start();
+    bool start(const IApp::program_t&);
     void stop();
     lv_group_t* getGroup();
 
@@ -47,8 +47,8 @@ private:
 
     lv_group_t* group = nullptr;
     TabView* menu = nullptr;
-    std::unique_ptr<MenuProgram> menu_program;
-    std::unique_ptr<MenuRun> menu_run;
+    std::unique_ptr<MenuProgram> menuProgram;
+    std::unique_ptr<MenuRun> menuRun;
 };
 
 } // namespace ui

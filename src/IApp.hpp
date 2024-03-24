@@ -2,26 +2,27 @@
 #define __IAPP_HPP__
 
 #include <utility>
+#include <optional>
 
 class IApp
 {
 public:
     struct program_t
     {
-        std::pair<float,int> ttConfig[5];
+        std::pair<float,int> tt_config[5];
         int rep_cnt = 0;
     };
 
     struct status_t
     {
-        bool  isRunning;
-        const char* state;
-        int   currentTargetN;
-        float currentTargetT;
-        float currentActualT;
-        int   currentRemaining;
-        int   pwm;
-        int   totalRemaining;
+        const char*             state;
+        std::optional<int>      currentTargetN;
+        std::optional<unsigned> repn;
+        std::optional<float>    currentTargetT;
+        float                   currentActualT;
+        std::optional<int>      currentRemaining;
+        int                     pwm;
+        std::optional<int>      totalRemaining;
     };
 
     struct sample_t

@@ -18,7 +18,7 @@ UI::UI(IApp& app)
 {
     lv_log_register_print_cb(_log_cb);
 
-    LV_LOG_INFO("Initializing UI...");
+    LV_LOG_INFO("UI | Initializing UI...");
 
     initGlobalStyles();
     initInput();
@@ -29,6 +29,7 @@ UI::UI(IApp& app)
 void UI::loop()
 {
     lv_task_handler();
+    menuRun->onStatus(app.status());
 }
 
 UI::~UI()
@@ -45,7 +46,7 @@ void UI::initInput()
     while (cur_drv)
     {
         [[maybe_unused]] auto type = cur_drv->driver->type;
-        LV_LOG_INFO("indev: %d", type);
+        LV_LOG_INFO("UI | indev: %d", type);
         if(cur_drv->driver->type == LV_INDEV_TYPE_KEYPAD)
         {
             lv_indev_set_group(cur_drv, group);
@@ -70,8 +71,8 @@ void UI::initUI()
     // lv_obj_set_style_border_width(menu_cnt, 1, LV_STATE_DEFAULT);
     // lv_obj_set_style_border_color(menu_cnt, lv_color_hex(0xFF0000), LV_STATE_DEFAULT);
 
-    menu_run = std::make_unique<MenuRun>(*this, menu);
-    menu_program = std::make_unique<MenuProgram>(*this, menu);
+    menuRun = std::make_unique<MenuRun>(*this, menu);
+    menuProgram = std::make_unique<MenuProgram>(*this, menu);
     menu->addTab("Settings");
     menu->addTab("Help");
 
@@ -84,14 +85,18 @@ void UI::initUI()
 
 std::pair<bool, IApp::program_t> UI::validate()
 {
-    return menu_program->validate();
+    return menuProgram->validate();
 }
 
-void UI::start()
-{}
+bool UI::start(const IApp::program_t& program)
+{
+    return app.start(program);
+}
 
 void UI::stop()
-{}
+{
+    app.stop();
+}
 
 lv_group_t* UI::getGroup()
 {

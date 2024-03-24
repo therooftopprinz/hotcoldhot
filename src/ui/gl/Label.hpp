@@ -5,10 +5,21 @@
 
 #include "Object.hpp"
 
+#include <cstdio>
+
 namespace ui
 {
 
-struct Label : Object{};
+struct Label : Object
+{
+    template <typename... Ts>
+    void setText(const char* fmt, Ts... ts)
+    {
+        char buff[64];
+        snprintf(buff, 64, fmt, ts...);
+        lv_label_set_text_fmt(this, "%s", buff);
+    }
+};
 
 class LabelBuilder
 {

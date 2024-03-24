@@ -134,8 +134,8 @@ std::pair<bool, IApp::program_t> MenuProgram::validate()
             inTime[i]->setStyleBgColor(lv_color_hex(0xFFFFFF));
         }
 
-        rv.second.ttConfig[i].first = temp; 
-        rv.second.ttConfig[i].second = time.second;
+        rv.second.tt_config[i].first = temp; 
+        rv.second.tt_config[i].second = time.second;
     }
 
     auto count = getInt(inCount->getText());

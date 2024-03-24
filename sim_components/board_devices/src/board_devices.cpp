@@ -1,109 +1,136 @@
 #include <board_devices.hpp>
 
 #include <unordered_map>
+#include <chrono>
+#include <thread>
+#include <cmath>
+#include <atomic>
+#include <chrono>
 
 #include "lvgl.h"
 
 struct board_devices_context_t
 {
-    constexpr double zero_c = 273.15;
-    // ambient1 -> load -> peltier -> heat_sink -> ambient2
-    // load defs
-    constexpr double load_kg = 0.1728;
-    constexpr double load_J_Kkg = 900;
-    constexpr double load_heatcap_J_K = (load_kg*load_J_Kkg); // 0.1728 kg * 900 J/(kg.K); a 40x40x40mm Al block
-              double load_heat_J = load_J_Kkg*zero_c*load_kg; // load heat at 0c
-    constexpr double load_to_ambient_W_m2k = 1;
-    constexpr double load_to_ambient_m2 = 0.0096; // (40*6 mm2)
-    constexpr double load_to_peltier_W_m2k = 12.7; // Grizzly Kryonaut
+    // heats
+    double heat_load = 0;
+    double heat_peltier_A = 0;
+    double heat_peltier_B = 0;
+    double heat_sink = 0;
 
-    // hs defs
-    constexpr double peltier_to_hs_W_m2k = 12.7; // Grizzly Kryonaut
-    constexpr double hs_kg = 0.5; // Grizzly Kryonaut
-    constexpr double hs_heatcap_J_K = (0.5*load_J_Kkg); // 0.5 kg * 900 J/(kg.K); a large Al block
-              double hs_heat_J = load_J_Kkg*zero_c*load_kg; // load heat at 0c
-    constexpr double hs_to_ambient_W_m2k = 64;
-    constexpr double hs_to_ambient_m2 = 0.04; // (200*200 mm2)
-    constexpr double hs_to_peltier_W_m2k = 12.7; // Grizzly Kryonaut
+    // heat mass J/K
+    static constexpr double htm_load   = 155.52; // Aluminum
+    static constexpr double htm_pplate =   5.10; // Alumina Ceramic
+    static constexpr double htm_sink   = 450.00; // Aluminum
 
-    // peltier defs
-    // E = (0.95 - T*0.0015)*I + T*0.003
-    // Peltier effect Qp: Heat transport from one side to the other. Described in this equation Qp = I * α * T
-    // Heat backflow QRth: Heat flow from the hot side to the cold side. Described in this equation QRth = dT / Rth
-    // Joule heating/losses QRv represent in the resistance Rv: Described in this equation QRv = I2 * Rv / 2.
-    // Qc = Qp - QRth - QRv.
+    // heat flow index W/K
+    static constexpr double hfi_ambient_load =   0.16;
+    static constexpr double hfi_pplate       =  40.00;
+    static constexpr double hfi_junction     =   1.92;
+    static constexpr double hfi_sink_ambient = 160.00;
 
-    double peltier_A(double T, double E, double f=1)
-    {
-        return (E - T*0.003lf/(0.95 - T*0.0015))*f;
-    }
+    static constexpr int N = 4;
+    static constexpr double tmp_ambient = 25;
 
-    constexpr double peltier_f = 1;
+    double tmp_load() const      {return heat_load/htm_load - 273.15;}
+    double tmp_peltier_A() const {return heat_peltier_A/htm_pplate - 273.15;}
+    double tmp_peltier_B() const {return heat_peltier_B/htm_pplate - 273.15;}
+    double tmp_sink() const      {return heat_sink/htm_sink - 273.15;}
 
-    double peltier_QRth(double T)
-        std::this_thread::sleep_for(std::chrono::milliseconds(1));
-    {
-        return T*70*0.0016
-    }
 
-    double peltier_QRv(double T, double E)
-    {
-        auto I = peltier_A(T,E,peltier_f);
-        return E*I/2;
-    }
+    // Peltier
+    double E = 0;
+    double peltier_coef = 12.5;
 
-    double peltier_Qp(double T, double E)
-    {
-        auto I = peltier_A(T,E,peltier_f);
-        return I*7.78;
-    }
-
-    double peltier_Qc(double T, double E)
-    {
-        auto I = peltier_A(T,E,peltier_f);
-        return peltier_Qp(T,E) - peltier_QRth(T) - peltier_QRv(T,E);
-    }
+    int64_t last_time;
 
     std::thread runner;
-    std::atomic<int> duty = 0;
-    std::atomic<float> sensor = 0;
+    std::atomic<float> duty = 0;
+    std::atomic<float> temp = 0;
 };
 
-std::unordered_map<void*, board_devices_context_t> bdmap;
+std::unordered_map<void*, board_devices_context_t> devmap;
 
-static void run_loop(board_devices_context_t& c)
+static int64_t time_us()
 {
+    return 10*std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
+}
+
+int64_t board_devices::time_us()
+{
+    return ::time_us();
+}
+
+void initialize(board_devices_context_t& c)
+{
+    c.last_time = time_us();
+    c.heat_load      = (273.15 + c.tmp_ambient) * c.htm_load;
+    c.heat_peltier_B = (273.15 + c.tmp_ambient) * c.htm_pplate;
+    c.heat_peltier_A = (273.15 + c.tmp_ambient) * c.htm_pplate;
+    c.heat_sink      = (273.15 + c.tmp_ambient) * c.htm_sink;
+    c.temp = c.tmp_ambient;
+}
+
+static void run(board_devices_context_t& c)
+{
+    initialize(c);
+    uint64_t dumper = 0;
     while (true)
     {
-        // map duty to voltage
-        double voltage = (fabs(c.duty)/100)*12;
-        if (voltage >= 12) voltage = 12;
-        bool cooling = sign(voltage);
-        if (cooling)
-        {
-            // double src =  
-            // double dst = 
-        }
+        std::this_thread::sleep_for(std::chrono::microseconds(100));
+        auto now = time_us();
+        auto dt = double(now - c.last_time)/(1000000);
+        c.last_time = now;
 
+        // Peltier
+        auto dT = c.tmp_peltier_B() - c.tmp_peltier_A();
+        dT *= copysign(1.f, c.duty);
+        auto E = c.duty*12;
+        auto I = (fabs(E) - (dT*0.003)/(0.95-dT*0.0015))*c.N;
+
+        // Heat Transfers Powers W
+        double htp_ambient_load = c.hfi_ambient_load * (c.tmp_ambient     - c.tmp_load());
+        double htp_load_plateA  = c.hfi_pplate       * (c.tmp_load()      - c.tmp_peltier_A());
+        double htp_backflow_AB  = c.hfi_junction     * (c.tmp_peltier_A() - c.tmp_peltier_B());
+        double htp_peltier_AB   = c.peltier_coef * I * copysign(1.f, E);
+        double htp_loss_AB      = fabs(E)        * I;
+        double htp_plateB_sink  = c.hfi_pplate       * (c.tmp_peltier_B() - c.tmp_sink());
+        double htp_sink_ambient = c.hfi_sink_ambient * (c.tmp_sink()      - c.tmp_ambient);
+
+        // Heat Transfer
+        c.heat_load         += (htp_ambient_load - htp_load_plateA)*dt;
+        c.heat_peltier_A    += (htp_load_plateA + htp_loss_AB*0.5 - htp_backflow_AB - htp_peltier_AB )*dt;
+        c.heat_peltier_B    += (htp_peltier_AB + htp_backflow_AB + htp_loss_AB*0.5 - htp_plateB_sink)*dt;
+        c.heat_sink         += (htp_plateB_sink - htp_sink_ambient)*dt;
+
+        c.temp = c.tmp_load();
+        if (0 == dumper%10000)
+        {
+            // LV_LOG_USER("DEV %.3lf %.3lf %.3lf %.3lf",
+            //     c.tmp_load(),
+            //     c.tmp_peltier_A(),
+            //     c.tmp_peltier_B(),
+            //     c.tmp_sink());
+        }
+        dumper++;
     }
 }
 
 board_devices::board_devices()
 {
-    auto& ctx = board_devices_context_t[this];
+    auto& ctx = devmap[this];
     ctx.runner = std::thread([&ctx](){
-        run_loop(ctx);
+        run(ctx);
     });
 }
 
-void set_peltier_duty(int d)
+void board_devices::set_peltier_duty_100(float d)
 {
-    auto& ctx = board_devices_context_t[this];
-    ctx.duty = d;
+    auto& ctx = devmap[this];
+    ctx.duty = d/100;
 }
 
-float get_sensor_temp()
+float board_devices::get_sensor_temp()
 {
-    auto& ctx = board_devices_context_t[this];
-    return ctx.sensor;
+    auto& ctx = devmap[this];
+    return ctx.temp;
 }
