@@ -5,6 +5,7 @@
 #include "IApp.hpp"
 
 #include <board_devices.hpp>
+#include <SeriesView.hpp>
 
 class App : public IApp
 {
@@ -15,13 +16,17 @@ public:
     bool start(const program_t&) override;
     bool stop() override;
     status_t status() override;
-    std::pair<uint32_t, std::vector<sample_t>> get_chart(uint32_t offset, uint32_t size, uint32_t resample) override;
+    std::tuple<short*, size_t, size_t> getChartTarget() override;
+    std::tuple<short*, size_t, size_t> getChartActual() override;
 
 private:
     void check();
     void setupTarget();
     bool nextTarget();
     void updateTarget(double);
+
+    SeriesView<short> serTarget;
+    SeriesView<short> serActual;
 
     board_devices dev;
     ui::UI ui;
@@ -43,9 +48,17 @@ private:
     program_t program;
     unsigned target = 0;
     std::optional<unsigned> rep = 0;
-    std::optional<int64_t> targetEndTime_s = 0;
+    std::optional<int64_t> targetEndTimeS = 0;
+    // std::optional<int64_t> targetStartTimeS = 0;
     double crossingTemp = 0;
     bool crossFromBelow = false;
+
+    int64_t lastChartSample;
+
+    // tleft
+    unsigned tLeftTarget = 0;
+    std::optional<unsigned> tLeftRep;
+    int64_t tLeft = 0;
 
     // PID
     double pwm = 0;

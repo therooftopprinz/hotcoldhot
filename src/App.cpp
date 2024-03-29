@@ -12,14 +12,18 @@ const char* App::states[5] = {
     };
 
 App::App()
-    : ui(*this)
+    : serTarget("target.ser", 60*8)
+    , serActual("actual.ser", 60*8)
+    , ui(*this)
 {
     lastTime = dev.time_us();
     LV_LOG_USER("Initializing App...");
 }
 
 App::~App()
-{}
+{
+    lastChartSample = dev.time_us();
+}
 
 void App::loop()
 {
@@ -29,6 +33,23 @@ void App::loop()
     lastTime = now;
     updateTarget(dt);
     ui.loop();
+
+    if ((now - lastChartSample) >= (1000*1000))
+    {
+        lastChartSample = now;
+        short targetX = program.tt_config[target].first*100;
+        short currentX = dev.get_sensor_temp()*100;
+        if (E_STATE_IDLE == state)
+        {
+            serTarget.push(currentX);
+        }
+        else
+        {
+            serTarget.push(targetX);
+        }
+
+        serActual.push(currentX);
+    }
 }
 
 void App::updateTarget(double dt)
@@ -92,7 +113,7 @@ bool App::stop()
     state = E_STATE_IDLE;
     pwm = 0;
     rep.reset();
-    targetEndTime_s.reset();
+    targetEndTimeS.reset();
     dev.set_peltier_duty_100(0);
     return true;
 }
@@ -106,27 +127,57 @@ IApp::status_t App::status()
 
     status.currentActualT = dev.get_sensor_temp();
 
-    if (state != E_STATE_IDLE)
+    // if (tLeftTarget != target || tLeftRep != rep)
+    // {
+    //     tLeftTarget = target;
+    //     tLeftRep = rep;
+    //     tLeft = 0;
+    //     auto xtarget = target;
+    //     auto xrep = rep.value_or(1);
+    //     while (true)
+    //     {
+    //         tLeft += program.tt_config[xtarget].second;
+    //         if (3 == xtarget && xrep <= program.rep_cnt)
+    //         {
+    //             xtarget = 1;
+    //             xrep++;
+    //         }
+    //         else
+    //         {
+    //             xtarget++;
+    //         }
+    //         if (xtarget == 5)
+    //         {
+    //             break;
+    //         }
+    //     }
+    // }
+
+    if (E_STATE_IDLE != state)
     {
         status.currentTargetN = target;
         status.currentTargetT = program.tt_config[target].first;
+        // auto left = tLeft;
+        // if (targetStartTimeS)
+        // {
+        //     left -= (now_s - *targetStartTimeS);
+        // }
+        // status.totalRemaining = left;
     }
 
-    if (targetEndTime_s && *targetEndTime_s >= now_s)
+    if (targetEndTimeS && *targetEndTimeS >= now_s)
     {
-        status.currentRemaining = *targetEndTime_s - now_s;
+        status.currentRemaining = *targetEndTimeS - now_s;
     }
 
-    status.repn = rep;
+    if (target >= 1 && target<4)
+    {
+        status.repn = rep;
+    }
+
     status.pwm = pwm;
 
     return status;
-}
-
-std::pair<uint32_t, std::vector<IApp::sample_t>>
-    App::get_chart(uint32_t offset, uint32_t size, uint32_t resample) 
-{
-    return {};
 }
 
 void App::setupTarget()
@@ -137,7 +188,7 @@ void App::setupTarget()
     }
 
     auto targetTemp = program.tt_config[target].first;
-    targetEndTime_s.reset();
+    targetEndTimeS.reset();
 
     state = E_STATE_WAIT_TEMP;
 
@@ -191,12 +242,13 @@ void App::check()
     if (E_STATE_WAIT_TEMP == old_state && state == E_STATE_WAIT_TIME)
     {
         auto prog_s = program.tt_config[target].second;
-        targetEndTime_s.emplace(now_s+prog_s);
+        // targetStartTimeS.emplace(now_s);
+        targetEndTimeS.emplace(now_s+prog_s);
     }
 
     if (E_STATE_WAIT_TIME == state)
     {
-        if (now_s >= *targetEndTime_s)
+        if (now_s >= *targetEndTimeS)
         {
             if (nextTarget())
             {
@@ -234,7 +286,7 @@ bool App::nextTarget()
     }
     else if (3 == target)
     {
-        target = 2;
+        target = 1;
         (*rep)++;
     }
     else
@@ -249,4 +301,14 @@ bool App::nextTarget()
     }
 
     return true;
+}
+
+std::tuple<short*, size_t, size_t> App::getChartTarget()
+{
+    return std::make_tuple(serTarget.getBuffer(), serTarget.getWindowSize(), serTarget.getOffset());
+}
+
+std::tuple<short*, size_t, size_t> App::getChartActual()
+{
+    return std::make_tuple(serActual.getBuffer(), serActual.getWindowSize(), serActual.getOffset());
 }

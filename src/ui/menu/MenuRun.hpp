@@ -28,6 +28,7 @@ class MenuRun
 public:
     MenuRun(UI&,TabView* parent);
     void onStatus(const IApp::status_t&);
+    void updateChart(const std::tuple<short*,size_t,size_t>&, const std::tuple<short*,size_t,size_t>&);
 private:
     static void onClickStart(lv_event_t*);
     static void onClickStop(lv_event_t*);
@@ -36,6 +37,8 @@ private:
 
     TabView* view = nullptr;
     Object* root = nullptr;
+    lv_chart_series_t *serTarget  = nullptr;
+    lv_chart_series_t *serCurrent = nullptr;
     Object* chart = nullptr;
 
     Label* state   = nullptr;

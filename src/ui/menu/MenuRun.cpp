@@ -61,14 +61,70 @@ MenuRun::MenuRun(UI& ui, TabView *parent)
     // create chart
     chart = (Object*) lv_chart_create(root);
     lv_obj_set_size(chart, chart_width, CONFIG_SCREEN_LINE_HEIGHT*7-2*RPAD);
-    // lv_chart_set_range(chart, LV_CHART_AXIS_PRIMARY_Y, -1000, 1000);
+    lv_chart_set_range(chart, LV_CHART_AXIS_PRIMARY_Y, -2000, 12000);
     /*Do not display points on the data*/
     lv_obj_set_style_size(chart, 0, LV_PART_INDICATOR);
-    lv_chart_series_t * ser = lv_chart_add_series(chart, lv_palette_main(LV_PALETTE_RED), LV_CHART_AXIS_PRIMARY_Y);
     lv_chart_set_point_count(chart, 0);
-    lv_chart_set_ext_y_array(chart, ser, nullptr);
+
+    serTarget = lv_chart_add_series(chart, lv_palette_main(LV_PALETTE_RED), LV_CHART_AXIS_PRIMARY_Y);
+    serCurrent = lv_chart_add_series(chart, lv_palette_main(LV_PALETTE_BLUE), LV_CHART_AXIS_PRIMARY_Y);
+
+    lv_chart_set_ext_y_array(chart, serTarget, nullptr);
+    lv_chart_set_ext_y_array(chart, serCurrent, nullptr);
 
     lv_obj_set_grid_cell(chart, LV_GRID_ALIGN_END,    0, 1, LV_GRID_ALIGN_START, 0, 7);
+}
+
+void MenuRun::updateChart(const std::tuple<short*,size_t,size_t>& target, const std::tuple<short*,size_t,size_t>& current)
+{
+    auto serTargetStart  = lv_chart_get_x_start_point(chart, serTarget);
+    auto serCurrentStart = lv_chart_get_x_start_point(chart, serCurrent);
+    auto chartCount = lv_chart_get_point_count(chart);
+    auto serTargetData  = lv_chart_get_y_array(chart, serTarget);
+    auto serCurrentData = lv_chart_get_y_array(chart, serCurrent);
+
+    auto bufTargetStart = std::get<2>(target);
+    auto bufCurrentStart = std::get<2>(current);
+    auto bufCount = std::min(std::get<1>(target), std::get<1>(current));
+    auto bufTargetData = std::get<0>(target);
+    auto bufCurrentData = std::get<0>(current);
+
+    bool doRefresh = false;
+
+    if (serTargetData != bufTargetData)
+    {
+        lv_chart_set_ext_y_array(chart, serTarget, bufTargetData);
+        doRefresh = true;
+    }
+
+    if (serCurrentData != bufCurrentData)
+    {
+        lv_chart_set_ext_y_array(chart, serCurrent, bufCurrentData);
+        doRefresh = true;
+    }
+
+    if (chartCount != bufCount)
+    {
+        lv_chart_set_point_count(chart, bufCount);
+        doRefresh = true;
+    }
+
+    if (serTargetStart != bufTargetStart)
+    {
+        lv_chart_set_x_start_point(chart, serTarget, bufTargetStart);
+        doRefresh = true;
+    }
+
+    if (serCurrentStart != bufCurrentStart)
+    {
+        lv_chart_set_x_start_point(chart, serCurrent, bufCurrentStart);
+        doRefresh = true;
+    }
+
+    if (doRefresh)
+    {
+        lv_chart_refresh(chart);
+    }
 }
 
 void MenuRun::onStatus(const IApp::status_t& status)
@@ -77,10 +133,39 @@ void MenuRun::onStatus(const IApp::status_t& status)
     targetT->setText("%.1f/%.1f",
         status.currentActualT,
         status.currentTargetT.value_or(status.currentActualT));
+    if ('I' != status.state[0])
+    {
+        if (status.repn)
+        {
+            targetN->setText("T%d-R%d",
+                status.currentTargetN.value_or(-1)+1,
+                status.repn.value_or(0));
+        }
+        else
+        {
+            targetN->setText("T%d",
+                status.currentTargetN.value_or(-1)+1);
+        }
+    }
+    else
+    {
+        targetN->setText("");
+    }
 
-    targetN->setText("T%d-R%d",
-        status.currentTargetN.value_or(-1)+1,
-        status.repn.value_or(0));
+    if (status.totalRemaining)
+    {
+        auto rem = *status.totalRemaining;
+        tleftS->setText("%d", rem);
+        char hhmmss[9];
+        to_s_str_hhmmss(hhmmss, sizeof(hhmmss), rem);
+        tleftS->setText(hhmmss);
+    }
+    else
+    {
+        tleftS->setText("");
+        tleftH->setText("");
+    }
+
 
     if (status.currentRemaining)
     {

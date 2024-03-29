@@ -30,6 +30,7 @@ void UI::loop()
 {
     lv_task_handler();
     menuRun->onStatus(app.status());
+    menuRun->updateChart(app.getChartTarget(), app.getChartActual());
 }
 
 UI::~UI()

@@ -36,7 +36,8 @@ public:
 
     virtual bool start(const program_t&) = 0;
     virtual bool stop() = 0;
-    virtual std::pair<uint32_t, std::vector<sample_t>> get_chart(uint32_t offset, uint32_t size, uint32_t resample) = 0;
+    virtual std::tuple<short*, size_t, size_t> getChartTarget() = 0;
+    virtual std::tuple<short*, size_t, size_t> getChartActual() = 0;
     virtual status_t status() = 0;
 };
 
