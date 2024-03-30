@@ -20,10 +20,12 @@ public:
     std::tuple<short*, size_t, size_t> getChartActual() override;
 
 private:
+    void loadCfg();
     void check();
     void setupTarget();
     bool nextTarget();
     void updateTarget(double);
+    void calculateTLeft();
 
     SeriesView<short> serTarget;
     SeriesView<short> serActual;
@@ -31,7 +33,7 @@ private:
     board_devices dev;
     ui::UI ui;
 
-    int64_t lastTime;
+    int64_t lastPIDSample;
 
     static const char* states[5];
 
@@ -49,7 +51,7 @@ private:
     unsigned target = 0;
     std::optional<unsigned> rep = 0;
     std::optional<int64_t> targetEndTimeS = 0;
-    // std::optional<int64_t> targetStartTimeS = 0;
+    std::optional<int64_t> targetStartTimeS = 0;
     double crossingTemp = 0;
     bool crossFromBelow = false;
 
@@ -63,6 +65,9 @@ private:
     // PID
     double pwm = 0;
     double pidI = 0;
+    double kPidP;
+    double kPidI;
+    double kPidLoopRate;
 };
 
 #endif // __APP_HPP__

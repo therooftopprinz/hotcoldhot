@@ -1,6 +1,7 @@
 #ifndef __CONFIG_H__
 #define __CONFIG_H__
 
+#define FS_PREFIX ""
 #define CONFIG_SCREEN_WIDTH  480
 #define CONFIG_SCREEN_HEIGHT 320
 #define CONFIG_SCREEN_LINES 8

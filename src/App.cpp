@@ -3,6 +3,8 @@
 #include <thread>
 #include <cmath>
 
+#include <configmap.hpp>
+
 const char* App::states[5] = {
         "IDLE",
         "WAIT_TEMP",
@@ -16,22 +18,43 @@ App::App()
     , serActual("actual.ser", 60*8)
     , ui(*this)
 {
-    lastTime = dev.time_us();
     LV_LOG_USER("Initializing App...");
+    lastPIDSample = dev.time_us();
+    lastChartSample = dev.time_us();
+    loadCfg();
 }
 
 App::~App()
 {
-    lastChartSample = dev.time_us();
+}
+
+void App::loadCfg()
+{
+    configmap cm;
+    cm.load(std::string(FS_PREFIX) + "config.cfg");
+    auto& cfg = cm.get();
+
+    for (auto& e : cfg)
+    {
+        LV_LOG_USER("config: %s = %s", e.first.c_str(), e.second.raw().c_str());
+    }
+
+    kPidP = cm.at_or("PID_P","40").as<double>();
+    kPidI = cm.at_or("PID_I","0.5").as<double>();
+    kPidLoopRate = cm.at_or("PID_Rate","0.001").as<double>();
 }
 
 void App::loop()
 {
     check();
     auto now = dev.time_us();
-    double dt = double(dev.time_us() - lastTime)/10000000;
-    lastTime = now;
-    updateTarget(dt);
+    double dt = double(dev.time_us() - lastPIDSample)/10000000;
+    if (dt >= kPidLoopRate)
+    {
+        lastPIDSample = now;
+        updateTarget(dt);
+    }
+
     ui.loop();
 
     if ((now - lastChartSample) >= (1000*1000))
@@ -64,12 +87,12 @@ void App::updateTarget(double dt)
     double error = program.tt_config[target].first - temp;
 
     // p coef
-    auto p = -error*40;
+    auto p = -error*kPidP;
     if (p > 12)  p = 12;
     if (p < -12) p = -12;
 
     // i coef
-    pidI += (p*0.5);
+    pidI += (p*kPidI);
     if (pidI > 12)  pidI = 12;
     if (pidI < -12) pidI = -12;
 
@@ -83,6 +106,10 @@ void App::updateTarget(double dt)
 
 bool App::start(const program_t& p)
 {
+    loadCfg();
+
+    pidI = 0;
+
     if (E_STATE_IDLE != state)
     {
         return false;
@@ -100,8 +127,11 @@ bool App::start(const program_t& p)
 
     dev.set_peltier_duty_100(0);
     rep.reset();
+    tLeftRep.reset();
     target = 0;
     pidI = 0;
+    tLeftTarget = -1;
+    calculateTLeft();
     setupTarget();
 
     return true;
@@ -114,8 +144,41 @@ bool App::stop()
     pwm = 0;
     rep.reset();
     targetEndTimeS.reset();
+    tLeftRep.reset();
     dev.set_peltier_duty_100(0);
     return true;
+}
+
+void App::calculateTLeft()
+{
+    if (tLeftTarget != target || tLeftRep != rep)
+    {
+        tLeftTarget = target;
+        tLeftRep = rep;
+        tLeft = 0;
+        auto xtarget = target;
+        auto xrep = rep.value_or(1);
+        while (true)
+        {
+            auto tt = program.tt_config[xtarget].second;
+            tLeft += tt;
+            LV_LOG_USER("App | status left: T%d-R%d tt=%d", xtarget+1, xrep, tt);
+            if (3 == xtarget && xrep < program.rep_cnt)
+            {
+                xtarget = 1;
+                xrep++;
+            }
+            else
+            {
+                xtarget++;
+            }
+            if (xtarget == 5)
+            {
+                break;
+            }
+        }
+        LV_LOG_USER("App | status left: total=%ld", tLeft);
+    }
 }
 
 IApp::status_t App::status()
@@ -127,42 +190,18 @@ IApp::status_t App::status()
 
     status.currentActualT = dev.get_sensor_temp();
 
-    // if (tLeftTarget != target || tLeftRep != rep)
-    // {
-    //     tLeftTarget = target;
-    //     tLeftRep = rep;
-    //     tLeft = 0;
-    //     auto xtarget = target;
-    //     auto xrep = rep.value_or(1);
-    //     while (true)
-    //     {
-    //         tLeft += program.tt_config[xtarget].second;
-    //         if (3 == xtarget && xrep <= program.rep_cnt)
-    //         {
-    //             xtarget = 1;
-    //             xrep++;
-    //         }
-    //         else
-    //         {
-    //             xtarget++;
-    //         }
-    //         if (xtarget == 5)
-    //         {
-    //             break;
-    //         }
-    //     }
-    // }
+    calculateTLeft();
 
     if (E_STATE_IDLE != state)
     {
         status.currentTargetN = target;
         status.currentTargetT = program.tt_config[target].first;
-        // auto left = tLeft;
-        // if (targetStartTimeS)
-        // {
-        //     left -= (now_s - *targetStartTimeS);
-        // }
-        // status.totalRemaining = left;
+        auto left = tLeft;
+        if (targetStartTimeS)
+        {
+            left -= (now_s - *targetStartTimeS);
+        }
+        status.totalRemaining = left;
     }
 
     if (targetEndTimeS && *targetEndTimeS >= now_s)
@@ -189,7 +228,7 @@ void App::setupTarget()
 
     auto targetTemp = program.tt_config[target].first;
     targetEndTimeS.reset();
-
+    targetStartTimeS.reset();
     state = E_STATE_WAIT_TEMP;
 
     auto temp = dev.get_sensor_temp();
@@ -242,7 +281,7 @@ void App::check()
     if (E_STATE_WAIT_TEMP == old_state && state == E_STATE_WAIT_TIME)
     {
         auto prog_s = program.tt_config[target].second;
-        // targetStartTimeS.emplace(now_s);
+        targetStartTimeS.emplace(now_s);
         targetEndTimeS.emplace(now_s+prog_s);
     }
 

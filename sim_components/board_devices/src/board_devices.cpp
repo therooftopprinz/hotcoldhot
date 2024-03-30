@@ -52,7 +52,7 @@ std::unordered_map<void*, board_devices_context_t> devmap;
 
 static int64_t time_us()
 {
-    return 10*std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
+    return 2*std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
 }
 
 int64_t board_devices::time_us()

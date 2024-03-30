@@ -46,7 +46,7 @@ private:
     Label* targetN = nullptr;
     Label* leftH   = nullptr;
     Label* leftS   = nullptr;
-    Label* mode    = nullptr;
+    Object* mode   = nullptr;
     Label* pwm     = nullptr;
     Label* tleftH  = nullptr;
     Label* tleftS  = nullptr;
