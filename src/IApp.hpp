@@ -3,6 +3,7 @@
 
 #include <utility>
 #include <optional>
+#include <SeriesView.hpp>
 
 class IApp
 {
@@ -36,8 +37,8 @@ public:
 
     virtual bool start(const program_t&) = 0;
     virtual bool stop() = 0;
-    virtual std::tuple<short*, size_t, size_t> getChartTarget() = 0;
-    virtual std::tuple<short*, size_t, size_t> getChartActual() = 0;
+    virtual SeriesView<short>& getChartTarget() = 0;
+    virtual SeriesView<short>& getChartActual() = 0;
     virtual status_t status() = 0;
 };
 

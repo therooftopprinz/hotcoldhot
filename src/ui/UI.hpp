@@ -33,10 +33,6 @@ public:
     UI(IApp&);
     ~UI();
     void loop();
-
-    std::pair<bool,IApp::program_t> validate();
-    bool start(const IApp::program_t&);
-    void stop();
     lv_group_t* getGroup();
 
 private:

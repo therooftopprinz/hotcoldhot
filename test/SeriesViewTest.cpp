@@ -33,8 +33,8 @@ void printSer(T& ser)
 
 TEST(SeriesView, shouldLoadFullAndPush)
 {
-    createSample<uint8_t>(10);
-    SeriesView<uint8_t> ser("test.ser", 5);
+    createSample<short>(10);
+    SeriesView<short> ser("test.ser", 5);
     printSer(ser);
     ser.push(10);
     ser.push(11);
@@ -45,8 +45,8 @@ TEST(SeriesView, shouldLoadFullAndPush)
 
 TEST(SeriesView, shouldLoadPartAndPush)
 {
-    createSample<uint8_t>(3);
-    SeriesView<uint8_t> ser("test.ser", 5);
+    createSample<short>(3);
+    SeriesView<short> ser("test.ser", 5);
     printSer(ser);
     ser.push(3);
     ser.push(4);
@@ -57,8 +57,8 @@ TEST(SeriesView, shouldLoadPartAndPush)
 
 TEST(SeriesView, shouldCreateAndPush)
 {
-    createSample<uint8_t>(0);
-    SeriesView<uint8_t> ser("test.ser", 5);
+    createSample<short>(0);
+    SeriesView<short> ser("test.ser", 5);
     printSer(ser);
     ser.push(1);
     ser.push(2);
@@ -73,8 +73,8 @@ TEST(SeriesView, shouldCreateAndPush)
 
 TEST(SeriesView, shouldScrollLeftWrapping)
 {
-    createSample<uint8_t>(100);
-    SeriesView<uint8_t> ser("test.ser", 10);
+    createSample<short>(100);
+    SeriesView<short> ser("test.ser", 10);
     ser.scrollBy(-5);
     printSer(ser);
     // @todo : expectations
@@ -82,8 +82,8 @@ TEST(SeriesView, shouldScrollLeftWrapping)
 
 TEST(SeriesView, shouldScrollLeftNonWrapping)
 {
-    createSample<uint8_t>(100);
-    SeriesView<uint8_t> ser("test.ser", 10);
+    createSample<short>(100);
+    SeriesView<short> ser("test.ser", 10);
     ser.scrollBy(-5); // wrapping
     ser.scrollBy(-1); // non wrapping
     printSer(ser);
@@ -92,8 +92,8 @@ TEST(SeriesView, shouldScrollLeftNonWrapping)
 
 TEST(SeriesView, shouldScrollLeftFullLoad)
 {
-    createSample<uint8_t>(100);
-    SeriesView<uint8_t> ser("test.ser", 10);
+    createSample<short>(100);
+    SeriesView<short> ser("test.ser", 10);
     ser.scrollBy(-20);
     printSer(ser);
     // @todo : expectations
@@ -101,8 +101,8 @@ TEST(SeriesView, shouldScrollLeftFullLoad)
 
 TEST(SeriesView, shouldScrollLeftOutOfBound)
 {
-    createSample<uint8_t>(100);
-    SeriesView<uint8_t> ser("test.ser", 10);
+    createSample<short>(100);
+    SeriesView<short> ser("test.ser", 10);
     ser.scrollBy(ser.FIRST);
     printSer(ser);
     // @todo : expectations
@@ -110,8 +110,8 @@ TEST(SeriesView, shouldScrollLeftOutOfBound)
 
 TEST(SeriesView, shouldScrollNotEnoughSample)
 {
-    createSample<uint8_t>(6);
-    SeriesView<uint8_t> ser("test.ser", 10);
+    createSample<short>(6);
+    SeriesView<short> ser("test.ser", 10);
     ser.scrollBy(ser.FIRST);
     printSer(ser);
     // @todo : expectations
@@ -121,8 +121,8 @@ TEST(SeriesView, shouldScrollNotEnoughSample)
 
 TEST(SeriesView, shouldScrollRightWrapping)
 {
-    createSample<uint8_t>(100);
-    SeriesView<uint8_t> ser("test.ser", 10);
+    createSample<short>(100);
+    SeriesView<short> ser("test.ser", 10);
     ser.scrollBy(ser.FIRST);
     printSer(ser);
     ser.scrollBy(5); // non wrapping
@@ -134,8 +134,8 @@ TEST(SeriesView, shouldScrollRightWrapping)
 
 TEST(SeriesView, shouldScrollRightNonWrapping)
 {
-    createSample<uint8_t>(100);
-    SeriesView<uint8_t> ser("test.ser", 10);
+    createSample<short>(100);
+    SeriesView<short> ser("test.ser", 10);
     ser.scrollBy(ser.FIRST);
     ser.scrollBy(5); // non wrapping
     printSer(ser);
@@ -144,8 +144,8 @@ TEST(SeriesView, shouldScrollRightNonWrapping)
 
 TEST(SeriesView, shouldScrollRightFullLoad)
 {
-    createSample<uint8_t>(100);
-    SeriesView<uint8_t> ser("test.ser", 10);
+    createSample<short>(100);
+    SeriesView<short> ser("test.ser", 10);
     ser.scrollBy(ser.FIRST);
     ser.scrollBy(20);
     printSer(ser);
@@ -154,10 +154,83 @@ TEST(SeriesView, shouldScrollRightFullLoad)
 
 TEST(SeriesView, shouldScrollRightOutOfBound)
 {
-    createSample<uint8_t>(100);
-    SeriesView<uint8_t> ser("test.ser", 10);
+    createSample<short>(100);
+    SeriesView<short> ser("test.ser", 10);
     ser.scrollBy(ser.FIRST);
     ser.scrollBy(ser.LAST);
     printSer(ser);
     // @todo : expectations
+}
+
+TEST(SeriesView, shouldViewExpandRightWall)
+{
+    createSample<short>(100);
+    SeriesView<short> ser("test.ser", 10);
+    printSer(ser);
+    ser.setWindowSize(20);
+    printSer(ser);
+    // @todo : expectations
+}
+
+TEST(SeriesView, shouldViewShrinkRightWall)
+{
+    createSample<short>(100);
+    SeriesView<short> ser("test.ser", 10);
+    printSer(ser);
+    ser.setWindowSize(5);
+    printSer(ser);
+    // @todo : expectations
+}
+
+TEST(SeriesView, shouldViewExpandLefWall)
+{
+    createSample<short>(100);
+    SeriesView<short> ser("test.ser", 10);
+    ser.scrollBy(ser.FIRST);
+    printSer(ser);
+    ser.setWindowSize(20);
+    printSer(ser);
+    // @todo : expectations
+}
+
+TEST(SeriesView, shouldViewShrinkLefWall)
+{
+    createSample<short>(100);
+    SeriesView<short> ser("test.ser", 10);
+    ser.scrollBy(ser.FIRST);
+    printSer(ser);
+    ser.setWindowSize(5);
+    printSer(ser);
+    // @todo : expectations
+}
+
+TEST(SeriesView, shouldViewExpandToFileSize)
+{
+    createSample<short>(20);
+    SeriesView<short> ser("test.ser", 10);
+    printSer(ser);
+    ser.setWindowSize(30);
+    printSer(ser);
+    // @todo : expectations
+}
+
+#include <cmath>
+
+TEST(SeriesView, shouldNotUpdateViewWhenNotAtEnd)
+{
+
+    size_t count = 60*60;
+    auto fp1 = fopen("target.ser", "w+");
+    auto fp2 = fopen("actual.ser", "w+");
+
+    for (size_t t = 0; t<count; t++)
+    {
+        short x = (sin(2*t*3.14/600)*0.25+0.5)*sin(2*t*3.14/60)*5000+5000;
+        short y = (sin(2*t*3.14/600)*0.25+0.5)*cos(2*t*3.14/60)*5000+5000;
+
+        fwrite(&x, sizeof(short), 1, fp1);
+        fwrite(&y, sizeof(short), 1, fp2);
+    }
+    fclose(fp1);
+    fclose(fp2);
 }

@@ -14,8 +14,8 @@ const char* App::states[5] = {
     };
 
 App::App()
-    : serTarget("target.ser", 60*8)
-    , serActual("actual.ser", 60*8)
+    : serTarget("target.ser", 60)
+    , serActual("actual.ser", 60)
     , ui(*this)
 {
     LV_LOG_USER("Initializing App...");
@@ -342,12 +342,12 @@ bool App::nextTarget()
     return true;
 }
 
-std::tuple<short*, size_t, size_t> App::getChartTarget()
+SeriesView<short>& App::getChartTarget()
 {
-    return std::make_tuple(serTarget.getBuffer(), serTarget.getWindowSize(), serTarget.getOffset());
+    return serTarget;
 }
 
-std::tuple<short*, size_t, size_t> App::getChartActual()
+SeriesView<short>& App::getChartActual()
 {
-    return std::make_tuple(serActual.getBuffer(), serActual.getWindowSize(), serActual.getOffset());
+    return serActual;
 }

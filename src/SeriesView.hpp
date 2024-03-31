@@ -7,12 +7,14 @@
 #include <vector>
 #include <cmath>
 
+#include "lvgl.h"
+
 template <typename T>
 class SeriesView
 {
 public:
-    static const int LAST = std::numeric_limits<int>::max();
-    static const int FIRST = std::numeric_limits<int>::min();
+    static constexpr auto LAST = std::numeric_limits<int64_t>::max();
+    static constexpr auto FIRST = std::numeric_limits<int64_t>::min()+1;
 
     SeriesView(std::string path, size_t sz)
         : fp(fopen(path.c_str(), "a+"))
@@ -45,8 +47,7 @@ public:
             windowB = 0;
         }
 
-        fseek(fp, fileOffset, SEEK_SET);
-        fread(window.data(), sizeof(int), window.size(), fp);
+        load(fileOffset, 0, window.size()*sizeof(T));
     }
 
     bool isViewBegin()
@@ -74,11 +75,45 @@ public:
         return windowA;
     }
 
-    // void setWindowSize(unsigned size)
-    // {
-    //     window.resize(size);
-    //     // reload
-    // }
+    int64_t getFileOffset()
+    {
+        return fileOffset;
+    }
+
+    void setWindowSize(unsigned size)
+    {
+        if (window.size() == size)
+        {
+            return;
+        }
+
+        if (fileSize == 0)
+        {
+            fileOffset = 0;
+            window.resize(sizeof(T)*4);
+            windowA = 0;
+            windowB = 0;
+            return;
+        }
+
+        if (size*sizeof(T) > fileSize)
+        {
+            fileOffset = 0;
+            window.resize(fileSize/sizeof(T));
+            load(fileOffset, 0, window.size()*sizeof(T));
+            windowA = 0;
+            windowB = windowIndex(windowA + window.size());
+            return;
+        }
+
+        auto oldSize = window.size();
+        window.resize(size);
+        auto scroll = int64_t(oldSize) - size;
+        load(fileOffset, 0, window.size()*sizeof(T));
+        windowA = 0;
+        windowB = 0;
+        scrollBy(scroll);
+    }
 
     void scrollBy(int64_t rpos)
     {
@@ -92,7 +127,7 @@ public:
             scrollRight(rpos);
             return;
         }
-        scrollLeft(abs(rpos));
+        scrollLeft(llabs(rpos));
     }
 
     void load(int64_t fpos, size_t offset, size_t size)
@@ -142,8 +177,8 @@ public:
             auto size2 = windowA;
             load(newFO, newWO, size1*sizeof(T));
             load(newFO+size1*sizeof(T), 0, size2*sizeof(T));
-            windowA = size1;
-            windowB = size1;
+            windowA = newWO;
+            windowB = newWO;
             return;
         }
 
@@ -161,7 +196,7 @@ public:
         }
 
         auto newFO = fileOffset+rpos*sizeof(T);
-        if (newFO+window.size()*sizeof(T) > fileSize)
+        if ((newFO+window.size()*sizeof(T)) > fileSize || rpos == LAST)
         {
             newFO = fileSize - window.size()*sizeof(T);
         }
@@ -202,22 +237,24 @@ public:
     {
         bool isEnd = isViewEnd();
         fseek(fp, 0, SEEK_END);
-        fwrite(&t, sizeof(t), 1, fp);
-        fileSize += sizeof(T);
+        fwrite(&t, sizeof(T), 1, fp);
+        fileSize = ftell(fp);
 
-        if (isEnd)
+        if (!isEnd)
         {
-            window[windowB] = t;
-            if (windowLDist(windowB, windowA) == window.size())
-            {
-                windowB = windowIndex(windowB+1);
-                windowA = windowIndex(windowA+1);
-                fileOffset += sizeof(T);
-            }
-            else
-            {
-                windowB = windowIndex(windowB+1);
-            }
+            return;
+        }
+
+        window[windowB] = t;
+        if (windowLDist(windowB, windowA) == window.size())
+        {
+            windowB = windowIndex(windowB+1);
+            windowA = windowIndex(windowA+1);
+            fileOffset += sizeof(T);
+        }
+        else
+        {
+            windowB = windowIndex(windowB+1);
         }
     }
 

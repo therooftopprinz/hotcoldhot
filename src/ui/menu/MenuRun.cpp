@@ -4,8 +4,10 @@
 
 namespace ui
 {
-MenuRun::MenuRun(UI& ui, TabView *parent)
+MenuRun::MenuRun(UI& ui, IApp& app, MenuProgram& program, TabView* parent)
     : ui(ui)
+    , app(app)
+    , program(program)
     , view(parent)
 {
     auto tab = parent->addTab("Run");
@@ -30,13 +32,13 @@ MenuRun::MenuRun(UI& ui, TabView *parent)
         (int(CONFIG_SCREEN_WIDTH * 0.750) / 10 - CPAD), // 9 Text4
         LV_GRID_TEMPLATE_LAST};
     static lv_coord_t row_dsc[] = {
-        CONFIG_SCREEN_LINE_HEIGHT - RPAD,
-        CONFIG_SCREEN_LINE_HEIGHT - RPAD,
-        CONFIG_SCREEN_LINE_HEIGHT - RPAD,
-        CONFIG_SCREEN_LINE_HEIGHT - RPAD,
-        CONFIG_SCREEN_LINE_HEIGHT - RPAD,
-        CONFIG_SCREEN_LINE_HEIGHT - RPAD,
-        CONFIG_SCREEN_LINE_HEIGHT - RPAD,
+        CONFIG_SCREEN_LINE_HEIGHT - RPAD, // 0
+        CONFIG_SCREEN_LINE_HEIGHT - RPAD, // 1
+        CONFIG_SCREEN_LINE_HEIGHT - RPAD, // 2
+        CONFIG_SCREEN_LINE_HEIGHT - RPAD, // 3
+        CONFIG_SCREEN_LINE_HEIGHT - RPAD, // 4
+        CONFIG_SCREEN_LINE_HEIGHT - RPAD, // 5
+        CONFIG_SCREEN_LINE_HEIGHT - RPAD, // 6
         LV_GRID_TEMPLATE_LAST};
 
     lv_obj_set_grid_dsc_array(root, col_dsc, row_dsc);
@@ -45,9 +47,9 @@ MenuRun::MenuRun(UI& ui, TabView *parent)
 
     lv_obj_set_grid_cell(LabelBuilder(root, "State").handle(),                   LV_GRID_ALIGN_START,  TXT_COL + 1, 1, LV_GRID_ALIGN_CENTER, 0, 1);
     lv_obj_set_grid_cell(LabelBuilder(root, "Target").handle(),                  LV_GRID_ALIGN_START,  TXT_COL + 1, 1, LV_GRID_ALIGN_CENTER, 1, 1);
-    lv_obj_set_grid_cell(LabelBuilder(root, "Current").handle(),                    LV_GRID_ALIGN_START,  TXT_COL + 1, 1, LV_GRID_ALIGN_CENTER, 2, 1);
+    lv_obj_set_grid_cell(LabelBuilder(root, "Current").handle(),                 LV_GRID_ALIGN_START,  TXT_COL + 1, 1, LV_GRID_ALIGN_CENTER, 2, 1);
     lv_obj_set_grid_cell(LabelBuilder(root, "Mode").handle(),                    LV_GRID_ALIGN_START,  TXT_COL + 1, 1, LV_GRID_ALIGN_CENTER, 3, 1);
-    lv_obj_set_grid_cell(LabelBuilder(root, "Power").handle(),                     LV_GRID_ALIGN_START,  TXT_COL + 3, 1, LV_GRID_ALIGN_CENTER, 3, 1);
+    lv_obj_set_grid_cell(LabelBuilder(root, "Power").handle(),                   LV_GRID_ALIGN_START,  TXT_COL + 3, 1, LV_GRID_ALIGN_CENTER, 3, 1);
     lv_obj_set_grid_cell(LabelBuilder(root, "Total").handle(),                   LV_GRID_ALIGN_START,  TXT_COL + 1, 1, LV_GRID_ALIGN_CENTER, 4, 1);
 
     lv_obj_set_grid_cell(state   = LabelBuilder(root, "STATE").handle(),         LV_GRID_ALIGN_END,    TXT_COL + 2, 3, LV_GRID_ALIGN_CENTER, 0, 1);
@@ -61,10 +63,19 @@ MenuRun::MenuRun(UI& ui, TabView *parent)
     lv_obj_set_grid_cell(pwm     = LabelBuilder(root, "XXX").handle(),           LV_GRID_ALIGN_END,    TXT_COL + 4, 1, LV_GRID_ALIGN_CENTER, 3, 1);
     lv_obj_set_grid_cell(tleftS  = LabelBuilder(root, "SSSS").handle(),          LV_GRID_ALIGN_END,    TXT_COL + 4, 1, LV_GRID_ALIGN_CENTER, 4, 1);
 
+    // Play Stop
     lv_obj_set_grid_cell(ButtonBuilder(root, LV_SYMBOL_PLAY, &onClickStart, this).handle(),  LV_GRID_ALIGN_CENTER, TXT_COL + 3, 2, LV_GRID_ALIGN_CENTER, 5, 1);
     lv_obj_set_grid_cell(ButtonBuilder(root, LV_SYMBOL_STOP,  &onClickStop,  this).handle(), LV_GRID_ALIGN_CENTER, TXT_COL + 3, 2, LV_GRID_ALIGN_CENTER, 6, 1);
-    lv_obj_set_grid_cell(ButtonBuilder(root, LV_SYMBOL_PLUS,  nullptr).handle(),             LV_GRID_ALIGN_CENTER, TXT_COL + 1, 2, LV_GRID_ALIGN_CENTER, 5, 1);
-    lv_obj_set_grid_cell(ButtonBuilder(root, LV_SYMBOL_MINUS, nullptr).handle(),             LV_GRID_ALIGN_CENTER, TXT_COL + 1, 2, LV_GRID_ALIGN_CENTER, 6, 1);
+    lv_obj_set_grid_cell(ButtonBuilder(root, "Load",  nullptr).handle(),                     LV_GRID_ALIGN_CENTER, TXT_COL + 1, 2, LV_GRID_ALIGN_CENTER, 5, 1);
+    lv_obj_set_grid_cell(ButtonBuilder(root, "Save", nullptr).handle(),                      LV_GRID_ALIGN_CENTER, TXT_COL + 1, 2, LV_GRID_ALIGN_CENTER, 6, 1);
+
+    // Grap Control
+    lv_obj_set_grid_cell(ButtonBuilder(root, LV_SYMBOL_LEFT,  &onClickScrollLeft, this).handle(),    LV_GRID_ALIGN_CENTER, 0, 1, LV_GRID_ALIGN_CENTER, 6, 1);
+    lv_obj_set_grid_cell(ButtonBuilder(root, LV_SYMBOL_RIGHT, &onClickScrollRight, this).handle(),   LV_GRID_ALIGN_CENTER, 1, 1, LV_GRID_ALIGN_CENTER, 6, 1);
+    lv_obj_set_grid_cell(ButtonBuilder(root, LV_SYMBOL_PLUS,  &onClickScrollPlus, this).handle(),    LV_GRID_ALIGN_CENTER, 2, 1, LV_GRID_ALIGN_CENTER, 6, 1);
+    lv_obj_set_grid_cell(ButtonBuilder(root, LV_SYMBOL_MINUS, &onClickScrollMinus, this).handle(),   LV_GRID_ALIGN_CENTER, 3, 1, LV_GRID_ALIGN_CENTER, 6, 1);
+    lv_obj_set_grid_cell(ButtonBuilder(root, LV_SYMBOL_PREV,  &onClickScrollFirst, this).handle(),   LV_GRID_ALIGN_CENTER, 4, 1, LV_GRID_ALIGN_CENTER, 6, 1);
+    lv_obj_set_grid_cell(ButtonBuilder(root, LV_SYMBOL_NEXT,  &onClickScrollLast, this).handle(),    LV_GRID_ALIGN_CENTER, 5, 1, LV_GRID_ALIGN_CENTER, 6, 1);
 
     // set led
     lv_led_set_brightness(mode, 0);
@@ -72,11 +83,12 @@ MenuRun::MenuRun(UI& ui, TabView *parent)
 
     // create chart
     chart = (Object*) lv_chart_create(root);
-    lv_obj_set_size(chart, chart_width, CONFIG_SCREEN_LINE_HEIGHT*7-2*RPAD);
+    lv_obj_set_size(chart, chart_width, CONFIG_SCREEN_LINE_HEIGHT*6-2*RPAD);
     lv_chart_set_range(chart, LV_CHART_AXIS_PRIMARY_Y, -2000, 12000);
     /*Do not display points on the data*/
     lv_obj_set_style_size(chart, 0, LV_PART_INDICATOR);
     lv_chart_set_point_count(chart, 0);
+    lv_chart_set_update_mode(chart, LV_CHART_UPDATE_MODE_SHIFT);
 
     serTarget = lv_chart_add_series(chart, lv_palette_main(LV_PALETTE_RED), LV_CHART_AXIS_PRIMARY_Y);
     serCurrent = lv_chart_add_series(chart, lv_palette_main(LV_PALETTE_BLUE), LV_CHART_AXIS_PRIMARY_Y);
@@ -84,33 +96,58 @@ MenuRun::MenuRun(UI& ui, TabView *parent)
     lv_chart_set_ext_y_array(chart, serTarget, nullptr);
     lv_chart_set_ext_y_array(chart, serCurrent, nullptr);
 
-    lv_obj_set_grid_cell(chart, LV_GRID_ALIGN_END,    0, 6, LV_GRID_ALIGN_START, 0, 7);
+    lv_obj_set_grid_cell(chart, LV_GRID_ALIGN_END,    0, 6, LV_GRID_ALIGN_START, 0, 6);
+
+    updateZoom();
 }
 
-void MenuRun::updateChart(const std::tuple<short*,size_t,size_t>& target, const std::tuple<short*,size_t,size_t>& current)
+void MenuRun::updateZoom()
 {
+    auto& bufCurrent = app.getChartActual();
+    auto& bufTarget = app.getChartTarget();
+    bufCurrent.setWindowSize(scrollConst*pow(2, scrollZoomLevel));
+    bufTarget.setWindowSize (scrollConst*pow(2, scrollZoomLevel));
+    if (!updateChart())
+    {
+        lv_chart_refresh(chart);
+    }
+}
+
+void MenuRun::loop()
+{
+    updateStatus();
+    updateChart();
+}
+
+bool MenuRun::updateChart()
+{
+    auto& bufTarget = app.getChartTarget();
+    auto& bufCurrent = app.getChartActual();
+
     auto serTargetStart  = lv_chart_get_x_start_point(chart, serTarget);
     auto serCurrentStart = lv_chart_get_x_start_point(chart, serCurrent);
     auto chartCount = lv_chart_get_point_count(chart);
     auto serTargetData  = lv_chart_get_y_array(chart, serTarget);
     auto serCurrentData = lv_chart_get_y_array(chart, serCurrent);
 
-    auto bufTargetStart = std::get<2>(target);
-    auto bufCurrentStart = std::get<2>(current);
-    auto bufCount = std::min(std::get<1>(target), std::get<1>(current));
-    auto bufTargetData = std::get<0>(target);
-    auto bufCurrentData = std::get<0>(current);
+    auto bufTargetStart = bufTarget.getOffset();
+    auto bufTargetData = bufTarget.getBuffer();
+    auto bufCurrentStart = bufCurrent.getOffset();
+    auto bufCurrentData = bufCurrent.getBuffer();
+    auto bufCount = std::min(bufTarget.getWindowSize(), bufCurrent.getWindowSize());
 
     bool doRefresh = false;
 
     if (serTargetData != bufTargetData)
     {
+        LV_LOG_USER("MenuRun | new target data %p to %p", serTargetData, bufTargetData);
         lv_chart_set_ext_y_array(chart, serTarget, bufTargetData);
         doRefresh = true;
     }
 
     if (serCurrentData != bufCurrentData)
     {
+        LV_LOG_USER("MenuRun | new actual data %p to %p", serCurrentData, bufCurrentData);
         lv_chart_set_ext_y_array(chart, serCurrent, bufCurrentData);
         doRefresh = true;
     }
@@ -123,12 +160,14 @@ void MenuRun::updateChart(const std::tuple<short*,size_t,size_t>& target, const 
 
     if (serTargetStart != bufTargetStart)
     {
+        LV_LOG_USER("MenuRun | new target start %hu to %lu", serTargetStart, bufTargetStart);
         lv_chart_set_x_start_point(chart, serTarget, bufTargetStart);
         doRefresh = true;
     }
 
     if (serCurrentStart != bufCurrentStart)
     {
+        LV_LOG_USER("MenuRun | new actual start %hu to %lu", serCurrentStart, bufCurrentStart);
         lv_chart_set_x_start_point(chart, serCurrent, bufCurrentStart);
         doRefresh = true;
     }
@@ -137,10 +176,14 @@ void MenuRun::updateChart(const std::tuple<short*,size_t,size_t>& target, const 
     {
         lv_chart_refresh(chart);
     }
+
+    return doRefresh;
 }
 
-void MenuRun::onStatus(const IApp::status_t& status)
+void MenuRun::updateStatus()
 {
+    const IApp::status_t& status = app.status();
+
     state->setText("%s", status.state);
 
     targetT->setText("%.1f/%.1f",
@@ -209,7 +252,7 @@ void MenuRun::onClickStart(lv_event_t* e)
     auto element = (Button*) lv_event_get_current_target(e);
     if (e->code == LV_EVENT_CLICKED)
     {
-        auto res = this_->ui.validate();
+        auto res = this_->program.validate();
         if (!res.first)
         {
             MessageBoxBuilder(this_->ui.getGroup())
@@ -220,12 +263,7 @@ void MenuRun::onClickStart(lv_event_t* e)
         }
         else
         {
-            this_->ui.start(res.second);
-            MessageBoxBuilder(this_->ui.getGroup())
-                .title("Notification")
-                .text("Started!")
-                .buttons(MessageBoxBuilder::BUTTONS_OK)
-                .show();
+            this_->app.start(res.second);
         }
     }
 }
@@ -236,7 +274,119 @@ void MenuRun::onClickStop(lv_event_t* e)
     auto element = (Button*) lv_event_get_current_target(e);
     if (e->code == LV_EVENT_CLICKED)
     {
-        this_->ui.stop();
+        this_->app.stop();
+    }
+}
+
+void MenuRun::onClickScrollLeft(lv_event_t* e)
+{
+    auto this_   = (MenuRun*) lv_event_get_user_data(e);
+    auto element = (Button*) lv_event_get_current_target(e);
+    if (e->code == LV_EVENT_CLICKED)
+    {
+        auto& bufCurrent = this_->app.getChartActual();
+        auto& bufTarget = this_->app.getChartTarget();
+        int64_t current = scrollConst*pow(2, this_->scrollZoomLevel)/10;
+        LV_LOG_USER("MenuRun | scroll: %ld (off=%ld,%ld)",
+            -current, bufCurrent.getFileOffset(), bufTarget.getFileOffset());
+        bufCurrent.scrollBy(-current);
+        bufTarget.scrollBy(-current);
+        if (!this_->updateChart())
+        {
+            lv_chart_refresh(this_->chart);
+        }
+    }
+}
+
+void MenuRun::onClickScrollRight(lv_event_t* e)
+{
+    auto this_   = (MenuRun*) lv_event_get_user_data(e);
+    auto element = (Button*) lv_event_get_current_target(e);
+    if (e->code == LV_EVENT_CLICKED)
+    {
+        auto& bufCurrent = this_->app.getChartActual();
+        auto& bufTarget = this_->app.getChartTarget();
+        int64_t current = scrollConst*pow(2, this_->scrollZoomLevel)/10;
+        LV_LOG_USER("MenuRun | scroll: %ld (off=%ld,%ld)",
+            current, bufCurrent.getFileOffset(), bufTarget.getFileOffset());
+        bufCurrent.scrollBy(current);
+        bufTarget.scrollBy(current);
+        if (!this_->updateChart())
+        {
+            lv_chart_refresh(this_->chart);
+        }
+    }
+}
+
+void MenuRun::onClickScrollPlus(lv_event_t* e)
+{
+    auto this_   = (MenuRun*) lv_event_get_user_data(e);
+    auto element = (Button*) lv_event_get_current_target(e);
+    if (e->code == LV_EVENT_CLICKED)
+    {
+        auto& bufCurrent = this_->app.getChartActual();
+        auto& bufTarget = this_->app.getChartTarget();
+        this_->scrollZoomLevel -= 1;
+        if (this_->scrollZoomLevel <= 0)
+        {
+            this_->scrollZoomLevel = 0;
+        }
+        LV_LOG_USER("MenuRun | zoom: %lf", pow(2,this_->scrollZoomLevel));
+        this_->updateZoom();
+    }
+}
+
+void MenuRun::onClickScrollMinus(lv_event_t* e)
+{
+    auto this_   = (MenuRun*) lv_event_get_user_data(e);
+    auto element = (Button*) lv_event_get_current_target(e);
+    if (e->code == LV_EVENT_CLICKED)
+    {
+        this_->scrollZoomLevel += 1;
+        if (this_->scrollZoomLevel >= 9)
+        {
+            this_->scrollZoomLevel = 9;
+        }
+        LV_LOG_USER("MenuRun | zoom: %lf", pow(2,this_->scrollZoomLevel));
+        this_->updateZoom();
+    }
+}
+
+void MenuRun::onClickScrollFirst(lv_event_t* e)
+{
+    auto this_   = (MenuRun*) lv_event_get_user_data(e);
+    auto element = (Button*) lv_event_get_current_target(e);
+    if (e->code == LV_EVENT_CLICKED)
+    {
+        auto& bufCurrent = this_->app.getChartActual();
+        auto& bufTarget = this_->app.getChartTarget();
+        LV_LOG_USER("MenuRun | scroll: %ld (off=%ld,%ld)",
+            bufCurrent.FIRST, bufCurrent.getFileOffset(), bufTarget.getFileOffset());
+        bufCurrent.scrollBy(bufCurrent.FIRST);
+        bufTarget.scrollBy(bufTarget.FIRST);
+        if (!this_->updateChart())
+        {
+            lv_chart_refresh(this_->chart);
+        }
+    }
+}
+
+void MenuRun::onClickScrollLast(lv_event_t* e)
+{
+    auto this_   = (MenuRun*) lv_event_get_user_data(e);
+    auto element = (Button*) lv_event_get_current_target(e);
+    if (e->code == LV_EVENT_CLICKED)
+    {
+        auto& bufCurrent = this_->app.getChartActual();
+        auto& bufTarget = this_->app.getChartTarget();
+        LV_LOG_USER("MenuRun | scroll: %ld (off=%ld,%ld)",
+            bufCurrent.LAST, bufCurrent.getFileOffset(), bufTarget.getFileOffset());
+        bufCurrent.scrollBy(bufCurrent.LAST);
+        bufTarget.scrollBy(bufTarget.LAST);
+        if (!this_->updateChart())
+        {
+            lv_chart_refresh(this_->chart);
+        }
     }
 }
 

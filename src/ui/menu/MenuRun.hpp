@@ -7,7 +7,8 @@
 
 #include "config.h"
 
-#include <ui/UI.hpp>
+#include <IApp.hpp>
+#include <ui/menu/MenuProgram.hpp>
 
 #include <ui/gl/Button.hpp>
 #include <ui/gl/Label.hpp>
@@ -22,24 +23,38 @@ namespace ui
 {
 
 class UI;
+class MenuProgram;
 
 class MenuRun
 {
 public:
-    MenuRun(UI&,TabView* parent);
-    void onStatus(const IApp::status_t&);
-    void updateChart(const std::tuple<short*,size_t,size_t>&, const std::tuple<short*,size_t,size_t>&);
+    MenuRun(UI&, IApp&, MenuProgram&, TabView* parent);
+    void loop();
 private:
+    void updateStatus();
+    bool updateChart();
+    void updateZoom();
     static void onClickStart(lv_event_t*);
     static void onClickStop(lv_event_t*);
+    static void onClickScrollLeft(lv_event_t*);
+    static void onClickScrollRight(lv_event_t*);
+    static void onClickScrollPlus(lv_event_t*);
+    static void onClickScrollMinus(lv_event_t*);
+    static void onClickScrollFirst(lv_event_t*);
+    static void onClickScrollLast(lv_event_t*);
 
     UI& ui;
+    IApp& app;
+    MenuProgram& program;
 
     TabView* view = nullptr;
     Object* root = nullptr;
     lv_chart_series_t *serTarget  = nullptr;
     lv_chart_series_t *serCurrent = nullptr;
     Object* chart = nullptr;
+
+    int scrollZoomLevel = 1;
+    static constexpr unsigned scrollConst = 60;  
 
     Label* state   = nullptr;
     Label* targetT = nullptr;

@@ -29,8 +29,7 @@ UI::UI(IApp& app)
 void UI::loop()
 {
     lv_task_handler();
-    menuRun->onStatus(app.status());
-    menuRun->updateChart(app.getChartTarget(), app.getChartActual());
+    menuRun->loop();
 }
 
 UI::~UI()
@@ -72,8 +71,8 @@ void UI::initUI()
     // lv_obj_set_style_border_width(menu_cnt, 1, LV_STATE_DEFAULT);
     // lv_obj_set_style_border_color(menu_cnt, lv_color_hex(0xFF0000), LV_STATE_DEFAULT);
 
-    menuRun = std::make_unique<MenuRun>(*this, menu);
     menuProgram = std::make_unique<MenuProgram>(*this, menu);
+    menuRun = std::make_unique<MenuRun>(*this, app, *menuProgram, menu);
     menu->addTab("Settings");
     menu->addTab("Help");
 
@@ -84,20 +83,20 @@ void UI::initUI()
         .show();
 }
 
-std::pair<bool, IApp::program_t> UI::validate()
-{
-    return menuProgram->validate();
-}
+// std::pair<bool, IApp::program_t> UI::validate()
+// {
+//     return menuProgram->validate();
+// }
 
-bool UI::start(const IApp::program_t& program)
-{
-    return app.start(program);
-}
+// bool UI::start(const IApp::program_t& program)
+// {
+//     return app.start(program);
+// }
 
-void UI::stop()
-{
-    app.stop();
-}
+// void UI::stop()
+// {
+//     app.stop();
+// }
 
 lv_group_t* UI::getGroup()
 {

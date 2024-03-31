@@ -5,7 +5,8 @@
 #include "IApp.hpp"
 
 #include <board_devices.hpp>
-#include <SeriesView.hpp>
+
+#include <thread>
 
 class App : public IApp
 {
@@ -16,9 +17,8 @@ public:
     bool start(const program_t&) override;
     bool stop() override;
     status_t status() override;
-    std::tuple<short*, size_t, size_t> getChartTarget() override;
-    std::tuple<short*, size_t, size_t> getChartActual() override;
-
+    SeriesView<short>& getChartTarget() override;
+    SeriesView<short>& getChartActual() override;
 private:
     void loadCfg();
     void check();
