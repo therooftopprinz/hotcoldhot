@@ -27,6 +27,7 @@ class MenuProgram
 public:
     MenuProgram(UI&,TabView* parent);
     std::pair<bool, IApp::program_t> validate();
+    void load(const IApp::program_t&);
 private:
     UI& ui;
     TabView* view = nullptr;

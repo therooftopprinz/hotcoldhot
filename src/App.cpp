@@ -4,6 +4,7 @@
 #include <cmath>
 
 #include <configmap.hpp>
+#include "config.h"
 
 const char* App::states[5] = {
         "IDLE",
@@ -14,8 +15,8 @@ const char* App::states[5] = {
     };
 
 App::App()
-    : serTarget("target.ser", 60)
-    , serActual("actual.ser", 60)
+    : serTarget(FS_PREFIX "/target.ser", 60)
+    , serActual(FS_PREFIX "/actual.ser", 60)
     , ui(*this)
 {
     LV_LOG_USER("Initializing App...");
@@ -31,7 +32,7 @@ App::~App()
 void App::loadCfg()
 {
     configmap cm;
-    cm.load(std::string(FS_PREFIX) + "config.cfg");
+    cm.load(FS_PREFIX "/config.cfg");
     auto& cfg = cm.get();
 
     for (auto& e : cfg)
@@ -46,6 +47,8 @@ void App::loadCfg()
 
 void App::loop()
 {
+    dev.loop();
+
     check();
     auto now = dev.time_us();
     double dt = double(dev.time_us() - lastPIDSample)/10000000;

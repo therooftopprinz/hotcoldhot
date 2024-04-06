@@ -1,6 +1,7 @@
 #include "MenuRun.hpp"
 #include "string_utils.hpp"
 #include <cmath>
+#include <fstream>
 
 namespace ui
 {
@@ -64,10 +65,18 @@ MenuRun::MenuRun(UI& ui, IApp& app, MenuProgram& program, TabView* parent)
     lv_obj_set_grid_cell(tleftS  = LabelBuilder(root, "SSSS").handle(),          LV_GRID_ALIGN_END,    TXT_COL + 4, 1, LV_GRID_ALIGN_CENTER, 4, 1);
 
     // Play Stop
-    lv_obj_set_grid_cell(ButtonBuilder(root, LV_SYMBOL_PLAY, &onClickStart, this).handle(),  LV_GRID_ALIGN_CENTER, TXT_COL + 3, 2, LV_GRID_ALIGN_CENTER, 5, 1);
-    lv_obj_set_grid_cell(ButtonBuilder(root, LV_SYMBOL_STOP,  &onClickStop,  this).handle(), LV_GRID_ALIGN_CENTER, TXT_COL + 3, 2, LV_GRID_ALIGN_CENTER, 6, 1);
-    lv_obj_set_grid_cell(ButtonBuilder(root, "Load",  nullptr).handle(),                     LV_GRID_ALIGN_CENTER, TXT_COL + 1, 2, LV_GRID_ALIGN_CENTER, 5, 1);
-    lv_obj_set_grid_cell(ButtonBuilder(root, "Save", nullptr).handle(),                      LV_GRID_ALIGN_CENTER, TXT_COL + 1, 2, LV_GRID_ALIGN_CENTER, 6, 1);
+    lv_obj_set_grid_cell(playStop = ButtonBuilder(root, LV_SYMBOL_PLAY, &onClickStart, this).handle(),     LV_GRID_ALIGN_CENTER, TXT_COL + 3, 2, LV_GRID_ALIGN_CENTER, 5, 1);
+    lv_obj_set_grid_cell(           ButtonBuilder(root, LV_SYMBOL_SAVE,  &onClickSave,  this).handle(),    LV_GRID_ALIGN_CENTER, TXT_COL + 3, 2, LV_GRID_ALIGN_CENTER, 6, 1);
+    lv_obj_set_grid_cell(loadList = (Object*) lv_dropdown_create(root),                                    LV_GRID_ALIGN_CENTER, TXT_COL + 1, 2, LV_GRID_ALIGN_CENTER, 5, 1);
+    lv_obj_set_grid_cell(           ButtonBuilder(root, LV_SYMBOL_DIRECTORY, &onClickLoad, this).handle(), LV_GRID_ALIGN_CENTER, TXT_COL + 1, 2, LV_GRID_ALIGN_CENTER, 6, 1);
+
+    playStop->setStyleBgColor(lv_palette_main(LV_PALETTE_GREEN));
+    lv_dropdown_clear_options(loadList);
+    for (int i=1; i<=20; i++)
+    {
+        lv_dropdown_add_option(loadList, std::to_string(i).c_str(), i-1);
+    }
+    loadList->setWidth(CONFIG_SCREEN_WIDTH/9);
 
     // Grap Control
     lv_obj_set_grid_cell(ButtonBuilder(root, LV_SYMBOL_LEFT,  &onClickScrollLeft, this).handle(),    LV_GRID_ALIGN_CENTER, 0, 1, LV_GRID_ALIGN_CENTER, 6, 1);
@@ -160,14 +169,12 @@ bool MenuRun::updateChart()
 
     if (serTargetStart != bufTargetStart)
     {
-        LV_LOG_USER("MenuRun | new target start %hu to %lu", serTargetStart, bufTargetStart);
         lv_chart_set_x_start_point(chart, serTarget, bufTargetStart);
         doRefresh = true;
     }
 
     if (serCurrentStart != bufCurrentStart)
     {
-        LV_LOG_USER("MenuRun | new actual start %hu to %lu", serCurrentStart, bufCurrentStart);
         lv_chart_set_x_start_point(chart, serCurrent, bufCurrentStart);
         doRefresh = true;
     }
@@ -252,7 +259,45 @@ void MenuRun::onClickStart(lv_event_t* e)
     auto element = (Button*) lv_event_get_current_target(e);
     if (e->code == LV_EVENT_CLICKED)
     {
+        if (!this_->hasStarted)
+        {
+            auto res = this_->program.validate();
+            if (!res.first)
+            {
+                MessageBoxBuilder(this_->ui.getGroup())
+                    .title("Validate Failed")
+                    .text("Please check program!")
+                    .buttons(MessageBoxBuilder::BUTTONS_OK)
+                    .show();
+            }
+            else
+            {
+                this_->app.start(res.second);
+                this_->hasStarted = true;
+                auto label = (Label*)element->getChild(0);
+                lv_label_set_text(label, LV_SYMBOL_STOP);
+                element->setStyleBgColor(lv_palette_main(LV_PALETTE_RED));
+            }
+        }
+        else
+        {
+            this_->app.stop();
+            this_->hasStarted = false;
+            auto label = (Label*)element->getChild(0);
+            lv_label_set_text(label, LV_SYMBOL_PLAY);
+            element->setStyleBgColor(lv_palette_main(LV_PALETTE_GREEN));
+        }
+    }
+}
+
+void MenuRun::onClickSave(lv_event_t* e)
+{
+    auto this_   = (MenuRun*) lv_event_get_user_data(e);
+    auto element = (Button*) lv_event_get_current_target(e);
+    if (e->code == LV_EVENT_CLICKED)
+    {
         auto res = this_->program.validate();
+        auto& program = res.second;
         if (!res.first)
         {
             MessageBoxBuilder(this_->ui.getGroup())
@@ -263,18 +308,41 @@ void MenuRun::onClickStart(lv_event_t* e)
         }
         else
         {
-            this_->app.start(res.second);
+            auto ll = this_->loadList;
+            char selected[4];
+            lv_dropdown_get_selected_str(ll, selected, sizeof(selected));
+            selected[3] = 0;
+            std::fstream fs(std::string(FS_PREFIX) + "/" + std::string(selected), fs.trunc | fs.out);
+            fs << program.rep_cnt << "\n";
+            for (int i=0; i<5; i++)
+            {
+                fs << program.tt_config[i].first << "\n";
+                fs << program.tt_config[i].second << "\n";
+            }
         }
     }
 }
 
-void MenuRun::onClickStop(lv_event_t* e)
+void MenuRun::onClickLoad(lv_event_t* e)
 {
     auto this_   = (MenuRun*) lv_event_get_user_data(e);
     auto element = (Button*) lv_event_get_current_target(e);
     if (e->code == LV_EVENT_CLICKED)
     {
-        this_->app.stop();
+        auto ll = this_->loadList;
+        char selected[4];
+        lv_dropdown_get_selected_str(ll, selected, sizeof(selected));
+        selected[3] = 0;
+        std::fstream fs(std::string(FS_PREFIX) + "/" + std::string(selected), fs.in);
+        std::string line;
+        IApp::program_t program;
+        fs >> program.rep_cnt;
+        for (int i=0; i<5; i++)
+        {
+            fs >> program.tt_config[i].first;
+            fs >> program.tt_config[i].second;
+        }
+        this_->program.load(program);
     }
 }
 
@@ -287,7 +355,7 @@ void MenuRun::onClickScrollLeft(lv_event_t* e)
         auto& bufCurrent = this_->app.getChartActual();
         auto& bufTarget = this_->app.getChartTarget();
         int64_t current = scrollConst*pow(2, this_->scrollZoomLevel)/10;
-        LV_LOG_USER("MenuRun | scroll: %ld (off=%ld,%ld)",
+        LV_LOG_USER("MenuRun | scroll: %ld (off=%zu,%zu)",
             -current, bufCurrent.getFileOffset(), bufTarget.getFileOffset());
         bufCurrent.scrollBy(-current);
         bufTarget.scrollBy(-current);

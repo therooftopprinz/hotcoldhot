@@ -10,6 +10,7 @@ public:
     int64_t time_us();
     void set_peltier_duty_100(float);
     float get_sensor_temp();
+    void loop();
 private:
 };
 

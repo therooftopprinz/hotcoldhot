@@ -6,6 +6,7 @@
 #include <limits>
 #include <vector>
 #include <cmath>
+#include <unistd.h>
 
 #include "lvgl.h"
 
@@ -22,11 +23,13 @@ public:
     {
         if (nullptr == fp)
         {
+            LV_LOG_USER("SeriesView[%p] | err=%s, failed to open file=%s", this, strerror(errno), path.c_str());
             return;
         }
 
         fseek(fp, 0, SEEK_END);
         fileSize = ftell(fp);
+        LV_LOG_USER("SeriesView[%p] | file=%s opened size=%lu", this, path.c_str(), fileSize);
         windowA = 0;
 
         if (window.size()*sizeof(T) > fileSize)
@@ -75,7 +78,7 @@ public:
         return windowA;
     }
 
-    int64_t getFileOffset()
+    size_t getFileOffset()
     {
         return fileOffset;
     }
@@ -130,7 +133,7 @@ public:
         scrollLeft(llabs(rpos));
     }
 
-    void load(int64_t fpos, size_t offset, size_t size)
+    void load(size_t fpos, size_t offset, size_t size)
     {
         if (!size)
         {
@@ -138,7 +141,12 @@ public:
         }
 
         fseek(fp, fpos, SEEK_SET);
-        fread(window.data()+offset, size, 1, fp);
+        auto ret = fread(window.data()+offset, 1, size, fp);
+        if (ret <= 0u)
+        {
+            LV_LOG_USER("SeriesView[%p] | err=%s, failed read!", this, strerror(errno));
+        }
+        LV_LOG_USER("SeriesView[%p] | load fpos=%zu fsize=%zu rsize=%zu",this,fpos,ret,size);
     }
 
     void scrollLeft(int64_t rpos)
@@ -149,7 +157,7 @@ public:
         }
 
         size_t newFO;
-        if (rpos*sizeof(T) > fileOffset)
+        if (rpos*sizeof(T) > fileOffset || rpos == llabs(FIRST))
         {
             newFO = 0;
         }
@@ -237,8 +245,15 @@ public:
     {
         bool isEnd = isViewEnd();
         fseek(fp, 0, SEEK_END);
-        fwrite(&t, sizeof(T), 1, fp);
+        auto rv = fwrite(&t, 1, sizeof(T), fp);
+        fsync(fileno(fp));
+        if (rv <= 0)
+        {
+            LV_LOG_USER("SeriesView[%p] | err=%s, failed write", this, strerror(errno));
+        }
+        fflush(fp);
         fileSize = ftell(fp);
+        LV_LOG_USER("SeriesView[%p] | written fileSize=%lu", this, (unsigned long)fileSize);
 
         if (!isEnd)
         {

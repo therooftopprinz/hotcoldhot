@@ -1,10 +1,15 @@
-#ifndef __CONFIG_H__
-#define __CONFIG_H__
+#ifndef __SRC_CONFIG_H__
+#define __SRC_CONFIG_H__
 
-#define FS_PREFIX ""
+#define FS_PREFIX "/sdcard"
 #define CONFIG_SCREEN_WIDTH  480
 #define CONFIG_SCREEN_HEIGHT 320
 #define CONFIG_SCREEN_LINES 8
 #define CONFIG_SCREEN_LINE_HEIGHT (CONFIG_SCREEN_HEIGHT/CONFIG_SCREEN_LINES)
 
-#endif // __CONFIG_H__
+#define PIN_NUM_MOSI 23
+#define PIN_NUM_MISO 19
+#define PIN_NUM_CLK  18
+#define PIN_NUM_CS    5
+
+#endif // __SRC_CONFIG_H__

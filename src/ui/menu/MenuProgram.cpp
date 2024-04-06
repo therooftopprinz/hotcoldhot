@@ -105,6 +105,21 @@ std::pair<bool,int> getInt(const char* in)
     return {true, rv};
 }
 
+void MenuProgram::load(const IApp::program_t& program)
+{
+    inCount->setText(std::to_string(program.rep_cnt).c_str());
+    for (unsigned i=0; i<5; i++)
+    {
+        auto temp = program.tt_config[i].first;
+        auto time = program.tt_config[i].second;
+        std::stringstream tempss;
+        tempss.precision(2);
+        tempss << std::fixed << temp;
+        inTemp[i]->setText(tempss.str().c_str());
+        inTime[i]->setText(std::to_string(time).c_str());
+    }
+}
+
 std::pair<bool, IApp::program_t> MenuProgram::validate()
 {
     std::pair<bool, IApp::program_t> rv;

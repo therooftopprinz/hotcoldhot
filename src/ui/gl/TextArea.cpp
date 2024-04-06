@@ -9,6 +9,11 @@ const char* TextArea::getText()
     return lv_textarea_get_text(this);
 }
 
+void TextArea::setText(const char* in)
+{
+    lv_textarea_set_text(this, in);
+}
+
 TextAreaBuilder::TextAreaBuilder(lv_obj_t* parent, unsigned width, unsigned height, Keyboard* kb, bool should_hide_keyboard)
     : element((TextArea*)lv_textarea_create(parent))
 {

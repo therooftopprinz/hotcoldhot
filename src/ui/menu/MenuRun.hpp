@@ -35,7 +35,8 @@ private:
     bool updateChart();
     void updateZoom();
     static void onClickStart(lv_event_t*);
-    static void onClickStop(lv_event_t*);
+    static void onClickSave(lv_event_t*);
+    static void onClickLoad(lv_event_t*);
     static void onClickScrollLeft(lv_event_t*);
     static void onClickScrollRight(lv_event_t*);
     static void onClickScrollPlus(lv_event_t*);
@@ -65,6 +66,11 @@ private:
     Label* pwm     = nullptr;
     Label* tleftH  = nullptr;
     Label* tleftS  = nullptr;
+
+    Button* playStop = nullptr;
+    Object* loadList = nullptr;
+
+    bool hasStarted = false;
 };
 
 } // namespace ui

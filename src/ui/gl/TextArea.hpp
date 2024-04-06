@@ -20,6 +20,7 @@ struct TextAreaData
 struct TextArea : Object
 {
     const char* getText();
+    void setText(const char*);
 };
 
 class TextAreaBuilder
