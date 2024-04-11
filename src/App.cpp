@@ -20,8 +20,9 @@ App::App()
     , ui(*this)
 {
     LV_LOG_USER("Initializing App...");
-    lastPIDSample = dev.time_us();
-    lastChartSample = dev.time_us();
+    nowUS = dev.time_us();
+    lastPIDSample = nowUS;
+    lastChartSample = nowUS;
     loadCfg();
 }
 
@@ -40,23 +41,26 @@ void App::loadCfg()
         LV_LOG_USER("config: %s = %s", e.first.c_str(), e.second.raw().c_str());
     }
 
-    kPidP = cm.at_or("PID_P","40").as<double>();
-    kPidI = cm.at_or("PID_I","0.5").as<double>();
-    kPidLoopRate = cm.at_or("PID_Rate","0.001").as<double>();
+    kPidP  = cm.at_or("PID_P","5").as<double>();
+    kPidI  = cm.at_or("PID_I","0").as<double>();
+    kPidD  = cm.at_or("PID_D","0").as<double>();
+    kPidTau = cm.at_or("PID_U","1").as<double>();
+    kPidLoopRate = cm.at_or("PID_Rate","0.2").as<double>();
 }
 
 void App::loop()
 {
     dev.loop();
-
-    check();
-    auto now = dev.time_us();
-    double dt = double(dev.time_us() - lastPIDSample)/10000000;
+    nowUS = dev.time_us();
+    auto now = nowUS;
+    double dt = double(now - lastPIDSample)/1000000;
     if (dt >= kPidLoopRate)
     {
         lastPIDSample = now;
         updateTarget(dt);
     }
+
+    check(now);
 
     ui.loop();
 
@@ -64,7 +68,7 @@ void App::loop()
     {
         lastChartSample = now;
         short targetX = program.tt_config[target].first*100;
-        short currentX = dev.get_sensor_temp()*100;
+        short currentX = lastTemp*100;
         if (E_STATE_IDLE == state)
         {
             serTarget.push(currentX);
@@ -80,30 +84,58 @@ void App::loop()
 
 void App::updateTarget(double dt)
 {
+    auto temp0 = lastTemp;
+    lastTemp = dev.get_sensor_temp();
+    auto temp = lastTemp;
+
     if (E_STATE_IDLE == state ||
         E_STATE_ERROR == state)
     {
         return;
     }
 
-    auto temp = dev.get_sensor_temp();
     double error = program.tt_config[target].first - temp;
+    double error0 = oldErr.value_or(error);
+    oldErr = error;
+    double dedt = (error-error0)*dt;
 
     // p coef
-    auto p = -error*kPidP;
-    if (p > 12)  p = 12;
-    if (p < -12) p = -12;
+    auto pidP = error*kPidP;
 
     // i coef
-    pidI += (p*kPidI);
-    if (pidI > 12)  pidI = 12;
-    if (pidI < -12) pidI = -12;
+    pidI += 0.5*kPidI*dt*(error + error0);
 
-    auto pi = p + pidI;
-    if (pi > 12)  pi = 12;
-    if (pi < -12) pi = -12;
+    // dynamic integrator clamping
+    double pidImax = 0;
+    double pidImin = 0;
+    if (kPidCut > pidP)
+    {
+        pidImax = kPidCut-pidP;
+    }
 
-    pwm = (pi/12)*100;
+    if (-kPidCut < pidP)
+    {
+        pidImin = -kPidCut-pidP;
+    }
+
+    if (pidI > pidImax) pidI = pidImax;
+    if (pidI < pidImin) pidI = pidImin;
+
+    // d coef
+    pidD =   2.f * kPidD * (temp - temp0)
+         +  pidD * (2.f * kPidTau - dt)/(2.f * kPidTau + dt);
+
+    auto pid = pidP + pidI + pidD;
+    if (pid > kPidCut)  pid = kPidCut;
+    if (pid < -kPidCut) pid = -kPidCut;
+
+    pwm = pid;
+   
+    LV_LOG_USER("App | PID %lf %12.3lf %12.3lf %12.3lf %12.3lf %12.3lf %12.3lf",
+        double(nowUS)/1000000, temp, error, pid, pidP, pidI, pidD);   
+
+    printPID++;
+
     dev.set_peltier_duty_100(pwm);
 }
 
@@ -112,6 +144,7 @@ bool App::start(const program_t& p)
     loadCfg();
 
     pidI = 0;
+    pidD = 0;
 
     if (E_STATE_IDLE != state)
     {
@@ -186,12 +219,12 @@ void App::calculateTLeft()
 
 IApp::status_t App::status()
 {
-    auto now_s = dev.time_us()/1000000;
+    auto now_s = nowUS/1000000;
 
     IApp::status_t status{};
     status.state = states[state];
 
-    status.currentActualT = dev.get_sensor_temp();
+    status.currentActualT = lastTemp;
 
     calculateTLeft();
 
@@ -234,7 +267,7 @@ void App::setupTarget()
     targetStartTimeS.reset();
     state = E_STATE_WAIT_TEMP;
 
-    auto temp = dev.get_sensor_temp();
+    auto temp = lastTemp;
 
     // @todo : configurable diff
     if (temp < targetTemp)
@@ -249,7 +282,7 @@ void App::setupTarget()
     }
 }
 
-void App::check()
+void App::check(int64_t now)
 {
     auto old_state = state;
     auto old_target = target;
@@ -263,24 +296,24 @@ void App::check()
 
     if (E_STATE_WAIT_TEMP == state)
     {
-        auto temp = dev.get_sensor_temp();
+        auto temp = lastTemp;
         if (crossFromBelow)
         {
-            if (temp >= crossingTemp)
+            if (temp >= (crossingTemp-2))
             {
                 state = E_STATE_WAIT_TIME;
             }
         }
         else
         {
-            if (temp <= crossingTemp)
+            if (temp <= (crossingTemp+2))
             {
                 state = E_STATE_WAIT_TIME;
             }
         }
     }
 
-    auto now_s = dev.time_us()/1000000;
+    auto now_s = now/1000000;
     if (E_STATE_WAIT_TEMP == old_state && state == E_STATE_WAIT_TIME)
     {
         auto prog_s = program.tt_config[target].second;

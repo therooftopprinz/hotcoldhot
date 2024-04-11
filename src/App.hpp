@@ -21,7 +21,7 @@ public:
     SeriesView<short>& getChartActual() override;
 private:
     void loadCfg();
-    void check();
+    void check(int64_t);
     void setupTarget();
     bool nextTarget();
     void updateTarget(double);
@@ -57,6 +57,10 @@ private:
 
     int64_t lastChartSample;
 
+    float lastTemp = -273.15;
+
+    int64_t nowUS;
+
     // tleft
     unsigned tLeftTarget = 0;
     std::optional<unsigned> tLeftRep;
@@ -65,9 +69,15 @@ private:
     // PID
     double pwm = 0;
     double pidI = 0;
+    double pidD = 0;
     double kPidP;
     double kPidI;
+    double kPidD;
+    double kPidTau = 0;
+    double kPidCut = 100;
     double kPidLoopRate;
+    std::optional<double> oldErr;
+    unsigned printPID = 0;
 };
 
 #endif // __APP_HPP__

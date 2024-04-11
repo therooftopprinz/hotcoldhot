@@ -12,4 +12,9 @@
 #define PIN_NUM_CLK  18
 #define PIN_NUM_CS    5
 
+// ESP32
+#define CONFIG_IP_REMOTE_SIM    "192.168.254.181:11111"
+// LAPTOP
+// #define CONFIG_IP_REMOTE_SIM    "192.168.254.125:11111"
+
 #endif // __SRC_CONFIG_H__

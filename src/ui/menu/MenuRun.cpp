@@ -212,7 +212,7 @@ void MenuRun::updateStatus()
         }
 
         lv_led_set_brightness(mode, 128*fabs(status.pwm)/100+127);
-        auto color = status.pwm > 0 ? LV_PALETTE_BLUE : LV_PALETTE_RED;
+        auto color = status.pwm > 0 ? LV_PALETTE_RED : LV_PALETTE_BLUE;
         lv_led_set_color(mode, lv_palette_main(color));
     }
     else

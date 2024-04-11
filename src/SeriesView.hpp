@@ -253,7 +253,7 @@ public:
         }
         fflush(fp);
         fileSize = ftell(fp);
-        LV_LOG_USER("SeriesView[%p] | written fileSize=%lu", this, (unsigned long)fileSize);
+        // LV_LOG_USER("SeriesView[%p] | written fileSize=%lu", this, (unsigned long)fileSize);
 
         if (!isEnd)
         {
