@@ -122,8 +122,8 @@ void App::updateTarget(double dt)
     if (pidI < pidImin) pidI = pidImin;
 
     // d coef
-    pidD =   2.f * kPidD * (temp - temp0)
-         +  pidD * (2.f * kPidTau - dt)/(2.f * kPidTau + dt);
+    pidD =   (2.f * kPidD * (temp - temp0) +  pidD * (2.f * kPidTau - dt))
+            /(2.f * kPidTau + dt);
 
     auto pid = pidP + pidI + pidD;
     if (pid > kPidCut)  pid = kPidCut;
