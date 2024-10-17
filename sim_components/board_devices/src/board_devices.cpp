@@ -84,7 +84,7 @@ void initialize(board_devices_context_t& c)
     cm.load(FS_PREFIX "/config.cfg");
     auto& cfg = cm.get();
 
-    c.TS  = cm.at_or("TS","1").as<int64_t>();
+    c.TS  = cm.at_or("T_Scale","1").as<int64_t>();
 }
 
 static void run(board_devices_context_t& c)

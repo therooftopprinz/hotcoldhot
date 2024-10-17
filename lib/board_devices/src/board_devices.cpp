@@ -9,10 +9,13 @@
 #include <cstdio>
 #include <optional>
 
+#include <inttypes.h>
+
 #include "Udp.hpp"
 #include "lvgl.h"
 #include "config.h"
 
+#include <configmap.hpp>
 struct field_t
 {
     enum {TAG_PWM, TAG_TEMP, TAG_TIME};
@@ -58,14 +61,24 @@ void sendWithRepeat(field_t& f, field_t& fr, board_devices_context_t& ctx)
 void initialize(board_devices_context_t& c)
 {
     c.sock.bind(bfc::toIp4Port("0.0.0.0:11112"));
-    c.server = bfc::toIp4Port(CONFIG_IP_REMOTE_SIM);
+
+    configmap cm;
+    cm.load(FS_PREFIX "/config.cfg");
+    auto host  = cm.at_or("SLV_Host","127.0.0.1").raw();
+    auto port  = cm.at_or("SLV_Port","11111").raw();
+    auto host_port = host + ":" + (port);
+    // auto host_port = "192.168.254.181:11111";
+    c.server = bfc::toIp4Port(host_port);
+
+    printf("%"PRId64"|board_devices| Slave device host[]=%s\n", time_us(), host.c_str());
+    printf("%"PRId64"|board_devices| Slave device port[]=%s\n", time_us(), port.c_str());
 
     struct timeval tv;
     tv.tv_sec = 0;
     tv.tv_usec = 1000;
     if (setsockopt(c.sock.handle(), SOL_SOCKET, SO_RCVTIMEO,&tv,sizeof(tv)) < 0)
     {
-        printf("%ld|board_devices| Can't set socket timeout!", time_us());
+        printf("%"PRId64"|board_devices| Can't set socket timeout!", time_us());
     }
 }
 

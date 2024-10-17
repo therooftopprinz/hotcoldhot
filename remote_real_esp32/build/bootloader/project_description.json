@@ -1,0 +1,25 @@
+{
+    "project_name":       "bootloader",
+    "project_path":       "/home/pbuyo/apps/esp-idf/components/bootloader/subproject",
+    "build_dir":          "/home/pbuyo/odevelopment/hotcoldhot/remote_real/build/bootloader",
+    "config_file":        "/home/pbuyo/odevelopment/hotcoldhot/remote_real/sdkconfig",
+    "config_defaults":    "",
+    "bootloader_elf":     "",
+    "app_elf":            "bootloader.elf",
+    "app_bin":            "bootloader.bin",
+    "git_revision":       "v5.0.1",
+    "target":             "esp32",
+    "rev":                "0",
+    "min_rev":            "0",
+    "max_rev":            "399",
+    "phy_data_partition": "",
+    "monitor_baud" :      "115200",
+    "monitor_toolprefix": "xtensa-esp32-elf-",
+    "config_environment" : {
+        "COMPONENT_KCONFIGS" : "/home/pbuyo/apps/esp-idf/components/efuse/Kconfig;/home/pbuyo/apps/esp-idf/components/esp_common/Kconfig;/home/pbuyo/apps/esp-idf/components/esp_hw_support/Kconfig;/home/pbuyo/apps/esp-idf/components/esp_system/Kconfig;/home/pbuyo/apps/esp-idf/components/freertos/Kconfig;/home/pbuyo/apps/esp-idf/components/hal/Kconfig;/home/pbuyo/apps/esp-idf/components/log/Kconfig;/home/pbuyo/apps/esp-idf/components/newlib/Kconfig;/home/pbuyo/apps/esp-idf/components/spi_flash/Kconfig",
+        "COMPONENT_KCONFIGS_PROJBUILD" : "/home/pbuyo/apps/esp-idf/components/bootloader/Kconfig.projbuild;/home/pbuyo/apps/esp-idf/components/esp_app_format/Kconfig.projbuild;/home/pbuyo/apps/esp-idf/components/esp_rom/Kconfig.projbuild;/home/pbuyo/apps/esp-idf/components/esptool_py/Kconfig.projbuild;/home/pbuyo/apps/esp-idf/components/partition_table/Kconfig.projbuild"
+    },
+    "build_components" : [ "bootloader", "bootloader_support", "efuse", "esp_app_format", "esp_common", "esp_hw_support", "esp_rom", "esp_system", "esptool_py", "freertos", "hal", "log", "main", "micro-ecc", "newlib", "partition_table", "soc", "spi_flash", "xtensa", "" ],
+    "build_component_paths" : [ "/home/pbuyo/apps/esp-idf/components/bootloader", "/home/pbuyo/apps/esp-idf/components/bootloader_support", "/home/pbuyo/apps/esp-idf/components/efuse", "/home/pbuyo/apps/esp-idf/components/esp_app_format", "/home/pbuyo/apps/esp-idf/components/esp_common", "/home/pbuyo/apps/esp-idf/components/esp_hw_support", "/home/pbuyo/apps/esp-idf/components/esp_rom", "/home/pbuyo/apps/esp-idf/components/esp_system", "/home/pbuyo/apps/esp-idf/components/esptool_py", "/home/pbuyo/apps/esp-idf/components/freertos", "/home/pbuyo/apps/esp-idf/components/hal", "/home/pbuyo/apps/esp-idf/components/log", "/home/pbuyo/apps/esp-idf/components/bootloader/subproject/main", "/home/pbuyo/apps/esp-idf/components/bootloader/subproject/components/micro-ecc", "/home/pbuyo/apps/esp-idf/components/newlib", "/home/pbuyo/apps/esp-idf/components/partition_table", "/home/pbuyo/apps/esp-idf/components/soc", "/home/pbuyo/apps/esp-idf/components/spi_flash", "/home/pbuyo/apps/esp-idf/components/xtensa", "" ],
+    "debug_prefix_map_gdbinit": ""
+}

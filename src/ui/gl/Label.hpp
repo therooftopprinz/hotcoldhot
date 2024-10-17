@@ -19,6 +19,10 @@ struct Label : Object
         snprintf(buff, 64, fmt, ts...);
         lv_label_set_text_fmt(this, "%s", buff);
     }
+    char* getText()
+    {
+        return lv_label_get_text(this);
+    }
 };
 
 class LabelBuilder

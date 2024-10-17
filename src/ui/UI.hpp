@@ -16,6 +16,7 @@
 
 #include "menu/MenuProgram.hpp"
 #include "menu/MenuRun.hpp"
+#include "menu/MenuSettings.hpp"
 #include "GlobalStyles.hpp"
 
 namespace ui
@@ -26,6 +27,7 @@ constexpr auto RPAD = 5;
 
 class MenuProgram;
 class MenuRun;
+class MenuSettings;
 
 class UI
 {
@@ -45,6 +47,7 @@ private:
     TabView* menu = nullptr;
     std::unique_ptr<MenuProgram> menuProgram;
     std::unique_ptr<MenuRun> menuRun;
+    std::unique_ptr<MenuSettings> menuSettings;
 };
 
 } // namespace ui

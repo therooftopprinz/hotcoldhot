@@ -1,0 +1,16 @@
+[1/10] Performing build step for 'bootloader'
+[1/1] cd /home/pbuyo/odevelopment/hotcoldhot/remote_real/build/bootloader/esp-idf/esptool_py && /home/pbuyo/.espressif/python_env/idf5.0_py3.10_env/bin/python /home/pbuyo/apps/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 bootloader 0x1000 /home/pbuyo/odevelopment/hotcoldhot/remote_real/build/bootloader/bootloader.bin
+Bootloader binary size 0x6700 bytes. 0x900 bytes (8%) free.
+[2/8] Building C object esp-idf/main/CMakeFiles/__idf_main.dir/network_manager.c.obj
+[3/8] Linking C static library esp-idf/main/libmain.a
+[4/8] Generating ld/sections.ld
+[5/8] Building C object CMakeFiles/temp_sense.elf.dir/project_elf_src_esp32.c.obj
+[6/8] Linking CXX executable temp_sense.elf
+[7/8] Generating binary image from built executable
+esptool.py v4.7.0
+Creating esp32 image...
+Merged 25 ELF sections
+Successfully created esp32 image.
+Generated /home/pbuyo/odevelopment/hotcoldhot/remote_real/build/temp_sense.bin
+[8/8] cd /home/pbuyo/odevelopment/hotcoldhot/remote_real/build/esp-idf/esptool_py && /home/pbuyo/.espressif/python_env/idf5.0_py3.10_env/bin/python /home/pbuyo/apps/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 partition --type app /home/pbuyo/odevelopment/hotcoldhot/remote_real/build/partition_table/partition-table.bin /home/pbuyo/odevelopment/hotcoldhot/remote_real/build/temp_sense.bin
+temp_sense.bin binary size 0xb5140 bytes. Smallest app partition is 0x100000 bytes. 0x4aec0 bytes (29%) free.

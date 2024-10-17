@@ -76,6 +76,7 @@ private:
     double kPidTau = 0;
     double kPidCut = 100;
     double kPidLoopRate;
+    double kPidS = 1;
     std::optional<double> oldErr;
     unsigned printPID = 0;
 };

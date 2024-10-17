@@ -1,0 +1,26 @@
+[1/9] Performing build step for 'bootloader'
+[1/1] cd /home/pbuyo/odevelopment/hotcoldhot/remote_real/build/bootloader/esp-idf/esptool_py && /home/pbuyo/.espressif/python_env/idf5.0_py3.10_env/bin/python /home/pbuyo/apps/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 bootloader 0x1000 /home/pbuyo/odevelopment/hotcoldhot/remote_real/build/bootloader/bootloader.bin
+Bootloader binary size 0x6700 bytes. 0x900 bytes (8%) free.
+[2/7] Building CXX object esp-idf/main/CMakeFiles/__idf_main.dir/board_devices.cpp.obj
+In file included from /home/pbuyo/odevelopment/hotcoldhot/remote_real/components/esp32-owb/include/owb_rmt.h:41,
+                 from /home/pbuyo/odevelopment/hotcoldhot/remote_real/components/esp32-owb/include/owb.h:330,
+                 from /home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp:8:
+/home/pbuyo/apps/esp-idf/components/driver/deprecated/driver/rmt.h:18:2: warning: #warning "The legacy RMT driver is deprecated, please use driver/rmt_tx.h and/or driver/rmt_rx.h" [-Wcpp]
+   18 | #warning "The legacy RMT driver is deprecated, please use driver/rmt_tx.h and/or driver/rmt_rx.h"
+      |  ^~~~~~~
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp: In function 'void run()':
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp:137:31: warning: unused variable 't' [-Wunused-variable]
+  137 |                 unsigned long t = time(NULL);
+      |                               ^
+[3/7] Linking C static library esp-idf/main/libmain.a
+[4/7] Generating ld/sections.ld
+[5/7] Linking CXX executable temp_sense.elf
+[6/7] Generating binary image from built executable
+esptool.py v4.7.0
+Creating esp32 image...
+Merged 25 ELF sections
+Successfully created esp32 image.
+Generated /home/pbuyo/odevelopment/hotcoldhot/remote_real/build/temp_sense.bin
+[7/7] cd /home/pbuyo/odevelopment/hotcoldhot/remote_real/build/esp-idf/esptool_py && /home/pbuyo/.espressif/python_env/idf5.0_py3.10_env/bin/python /home/pbuyo/apps/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 partition --type app /home/pbuyo/odevelopment/hotcoldhot/remote_real/build/partition_table/partition-table.bin /home/pbuyo/odevelopment/hotcoldhot/remote_real/build/temp_sense.bin
+temp_sense.bin binary size 0xfc130 bytes. Smallest app partition is 0x100000 bytes. 0x3ed0 bytes (2%) free.
+Warning: The smallest app partition is nearly full (2% free space left)!

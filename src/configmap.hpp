@@ -7,6 +7,7 @@
 #include <sstream>
 #include <fstream>
 #include <utility>
+#include <cstdio>
 
 class configmap
 {
@@ -63,8 +64,10 @@ public:
         auto it = config.find(std::forward<Index>(index));
         if (it == config.end())
         {
+            // printf("configmanager: not found! def=%s", def.c_str());
             return value_t{std::move(def)};
         }
+        // printf("configmanager: found! key=\"%s\" val=\"%s\"\n", it->first.c_str(), it->second.raw().c_str());
         return it->second;
     }
 

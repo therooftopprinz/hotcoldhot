@@ -1,0 +1,185 @@
+[0/1] Re-running CMake...
+-- Building ESP-IDF components for target esp32
+-- Project sdkconfig file /home/pbuyo/odevelopment/hotcoldhot/remote_real/sdkconfig
+-- App "temp_sense" version: 3132a66-dirty
+-- Adding linker script /home/pbuyo/odevelopment/hotcoldhot/remote_real/build/esp-idf/esp_system/ld/memory.ld
+-- Adding linker script /home/pbuyo/apps/esp-idf/components/esp_system/ld/esp32/sections.ld.in
+-- Adding linker script /home/pbuyo/apps/esp-idf/components/esp_rom/esp32/ld/esp32.rom.ld
+-- Adding linker script /home/pbuyo/apps/esp-idf/components/esp_rom/esp32/ld/esp32.rom.api.ld
+-- Adding linker script /home/pbuyo/apps/esp-idf/components/esp_rom/esp32/ld/esp32.rom.libgcc.ld
+-- Adding linker script /home/pbuyo/apps/esp-idf/components/esp_rom/esp32/ld/esp32.rom.newlib-data.ld
+-- Adding linker script /home/pbuyo/apps/esp-idf/components/esp_rom/esp32/ld/esp32.rom.syscalls.ld
+-- Adding linker script /home/pbuyo/apps/esp-idf/components/esp_rom/esp32/ld/esp32.rom.newlib-funcs.ld
+-- Adding linker script /home/pbuyo/apps/esp-idf/components/soc/esp32/ld/esp32.peripherals.ld
+-- Components: app_trace app_update bootloader bootloader_support bt cmock console cxx driver efuse esp-tls esp32-ds18b20 esp32-owb esp_adc esp_app_format esp_common esp_eth esp_event esp_gdbstub esp_hid esp_http_client esp_http_server esp_https_ota esp_https_server esp_hw_support esp_lcd esp_local_ctrl esp_netif esp_partition esp_phy esp_pm esp_psram esp_ringbuf esp_rom esp_system esp_timer esp_wifi espcoredump esptool_py fatfs freertos hal heap http_parser idf_test ieee802154 json log lwip main mbedtls mqtt newlib nvs_flash openthread partition_table perfmon protobuf-c protocomm pthread sdmmc soc spi_flash spiffs tcp_transport ulp unity usb vfs wear_levelling wifi_provisioning wpa_supplicant xtensa
+-- Component paths: /home/pbuyo/apps/esp-idf/components/app_trace /home/pbuyo/apps/esp-idf/components/app_update /home/pbuyo/apps/esp-idf/components/bootloader /home/pbuyo/apps/esp-idf/components/bootloader_support /home/pbuyo/apps/esp-idf/components/bt /home/pbuyo/apps/esp-idf/components/cmock /home/pbuyo/apps/esp-idf/components/console /home/pbuyo/apps/esp-idf/components/cxx /home/pbuyo/apps/esp-idf/components/driver /home/pbuyo/apps/esp-idf/components/efuse /home/pbuyo/apps/esp-idf/components/esp-tls /home/pbuyo/odevelopment/hotcoldhot/remote_real/components/esp32-ds18b20 /home/pbuyo/odevelopment/hotcoldhot/remote_real/components/esp32-owb /home/pbuyo/apps/esp-idf/components/esp_adc /home/pbuyo/apps/esp-idf/components/esp_app_format /home/pbuyo/apps/esp-idf/components/esp_common /home/pbuyo/apps/esp-idf/components/esp_eth /home/pbuyo/apps/esp-idf/components/esp_event /home/pbuyo/apps/esp-idf/components/esp_gdbstub /home/pbuyo/apps/esp-idf/components/esp_hid /home/pbuyo/apps/esp-idf/components/esp_http_client /home/pbuyo/apps/esp-idf/components/esp_http_server /home/pbuyo/apps/esp-idf/components/esp_https_ota /home/pbuyo/apps/esp-idf/components/esp_https_server /home/pbuyo/apps/esp-idf/components/esp_hw_support /home/pbuyo/apps/esp-idf/components/esp_lcd /home/pbuyo/apps/esp-idf/components/esp_local_ctrl /home/pbuyo/apps/esp-idf/components/esp_netif /home/pbuyo/apps/esp-idf/components/esp_partition /home/pbuyo/apps/esp-idf/components/esp_phy /home/pbuyo/apps/esp-idf/components/esp_pm /home/pbuyo/apps/esp-idf/components/esp_psram /home/pbuyo/apps/esp-idf/components/esp_ringbuf /home/pbuyo/apps/esp-idf/components/esp_rom /home/pbuyo/apps/esp-idf/components/esp_system /home/pbuyo/apps/esp-idf/components/esp_timer /home/pbuyo/apps/esp-idf/components/esp_wifi /home/pbuyo/apps/esp-idf/components/espcoredump /home/pbuyo/apps/esp-idf/components/esptool_py /home/pbuyo/apps/esp-idf/components/fatfs /home/pbuyo/apps/esp-idf/components/freertos /home/pbuyo/apps/esp-idf/components/hal /home/pbuyo/apps/esp-idf/components/heap /home/pbuyo/apps/esp-idf/components/http_parser /home/pbuyo/apps/esp-idf/components/idf_test /home/pbuyo/apps/esp-idf/components/ieee802154 /home/pbuyo/apps/esp-idf/components/json /home/pbuyo/apps/esp-idf/components/log /home/pbuyo/apps/esp-idf/components/lwip /home/pbuyo/odevelopment/hotcoldhot/remote_real/main /home/pbuyo/apps/esp-idf/components/mbedtls /home/pbuyo/apps/esp-idf/components/mqtt /home/pbuyo/apps/esp-idf/components/newlib /home/pbuyo/apps/esp-idf/components/nvs_flash /home/pbuyo/apps/esp-idf/components/openthread /home/pbuyo/apps/esp-idf/components/partition_table /home/pbuyo/apps/esp-idf/components/perfmon /home/pbuyo/apps/esp-idf/components/protobuf-c /home/pbuyo/apps/esp-idf/components/protocomm /home/pbuyo/apps/esp-idf/components/pthread /home/pbuyo/apps/esp-idf/components/sdmmc /home/pbuyo/apps/esp-idf/components/soc /home/pbuyo/apps/esp-idf/components/spi_flash /home/pbuyo/apps/esp-idf/components/spiffs /home/pbuyo/apps/esp-idf/components/tcp_transport /home/pbuyo/apps/esp-idf/components/ulp /home/pbuyo/apps/esp-idf/components/unity /home/pbuyo/apps/esp-idf/components/usb /home/pbuyo/apps/esp-idf/components/vfs /home/pbuyo/apps/esp-idf/components/wear_levelling /home/pbuyo/apps/esp-idf/components/wifi_provisioning /home/pbuyo/apps/esp-idf/components/wpa_supplicant /home/pbuyo/apps/esp-idf/components/xtensa
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/pbuyo/odevelopment/hotcoldhot/remote_real/build
+[1/10] Performing build step for 'bootloader'
+[1/1] cd /home/pbuyo/odevelopment/hotcoldhot/remote_real/build/bootloader/esp-idf/esptool_py && /home/pbuyo/.espressif/python_env/idf5.0_py3.10_env/bin/python /home/pbuyo/apps/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 bootloader 0x1000 /home/pbuyo/odevelopment/hotcoldhot/remote_real/build/bootloader/bootloader.bin
+Bootloader binary size 0x6700 bytes. 0x900 bytes (8%) free.
+[2/8] Building CXX object esp-idf/main/CMakeFiles/__idf_main.dir/app_main.cpp.obj
+FAILED: esp-idf/main/CMakeFiles/__idf_main.dir/app_main.cpp.obj 
+/home/pbuyo/.espressif/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-g++ -DMBEDTLS_CONFIG_FILE=\"mbedtls/esp_config.h\" -DUNITY_INCLUDE_CONFIG_H -I/home/pbuyo/odevelopment/hotcoldhot/remote_real/build/config -I/home/pbuyo/odevelopment/hotcoldhot/remote_real/main -I/home/pbuyo/apps/esp-idf/components/newlib/platform_include -I/home/pbuyo/apps/esp-idf/components/freertos/FreeRTOS-Kernel/include -I/home/pbuyo/apps/esp-idf/components/freertos/esp_additions/include/freertos -I/home/pbuyo/apps/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/include -I/home/pbuyo/apps/esp-idf/components/freertos/esp_additions/include -I/home/pbuyo/apps/esp-idf/components/esp_hw_support/include -I/home/pbuyo/apps/esp-idf/components/esp_hw_support/include/soc -I/home/pbuyo/apps/esp-idf/components/esp_hw_support/include/soc/esp32 -I/home/pbuyo/apps/esp-idf/components/esp_hw_support/port/esp32/. -I/home/pbuyo/apps/esp-idf/components/esp_hw_support/port/esp32/private_include -I/home/pbuyo/apps/esp-idf/components/heap/include -I/home/pbuyo/apps/esp-idf/components/log/include -I/home/pbuyo/apps/esp-idf/components/soc/include -I/home/pbuyo/apps/esp-idf/components/soc/esp32/. -I/home/pbuyo/apps/esp-idf/components/soc/esp32/include -I/home/pbuyo/apps/esp-idf/components/hal/esp32/include -I/home/pbuyo/apps/esp-idf/components/hal/include -I/home/pbuyo/apps/esp-idf/components/hal/platform_port/include -I/home/pbuyo/apps/esp-idf/components/esp_rom/include -I/home/pbuyo/apps/esp-idf/components/esp_rom/include/esp32 -I/home/pbuyo/apps/esp-idf/components/esp_rom/esp32 -I/home/pbuyo/apps/esp-idf/components/esp_common/include -I/home/pbuyo/apps/esp-idf/components/esp_system/include -I/home/pbuyo/apps/esp-idf/components/esp_system/port/soc -I/home/pbuyo/apps/esp-idf/components/esp_system/port/include/private -I/home/pbuyo/apps/esp-idf/components/xtensa/include -I/home/pbuyo/apps/esp-idf/components/xtensa/esp32/include -I/home/pbuyo/apps/esp-idf/components/lwip/include -I/home/pbuyo/apps/esp-idf/components/lwip/include/apps -I/home/pbuyo/apps/esp-idf/components/lwip/include/apps/sntp -I/home/pbuyo/apps/esp-idf/components/lwip/lwip/src/include -I/home/pbuyo/apps/esp-idf/components/lwip/port/esp32/include -I/home/pbuyo/apps/esp-idf/components/lwip/port/esp32/include/arch -I/home/pbuyo/apps/esp-idf/components/esp_ringbuf/include -I/home/pbuyo/apps/esp-idf/components/efuse/include -I/home/pbuyo/apps/esp-idf/components/efuse/esp32/include -I/home/pbuyo/apps/esp-idf/components/driver/include -I/home/pbuyo/apps/esp-idf/components/driver/deprecated -I/home/pbuyo/apps/esp-idf/components/driver/esp32/include -I/home/pbuyo/apps/esp-idf/components/esp_pm/include -I/home/pbuyo/apps/esp-idf/components/mbedtls/port/include -I/home/pbuyo/apps/esp-idf/components/mbedtls/mbedtls/include -I/home/pbuyo/apps/esp-idf/components/mbedtls/mbedtls/library -I/home/pbuyo/apps/esp-idf/components/mbedtls/esp_crt_bundle/include -I/home/pbuyo/apps/esp-idf/components/esp_app_format/include -I/home/pbuyo/apps/esp-idf/components/bootloader_support/include -I/home/pbuyo/apps/esp-idf/components/bootloader_support/bootloader_flash/include -I/home/pbuyo/apps/esp-idf/components/esp_partition/include -I/home/pbuyo/apps/esp-idf/components/app_update/include -I/home/pbuyo/apps/esp-idf/components/spi_flash/include -I/home/pbuyo/apps/esp-idf/components/pthread/include -I/home/pbuyo/apps/esp-idf/components/esp_timer/include -I/home/pbuyo/apps/esp-idf/components/app_trace/include -I/home/pbuyo/apps/esp-idf/components/esp_event/include -I/home/pbuyo/apps/esp-idf/components/nvs_flash/include -I/home/pbuyo/apps/esp-idf/components/esp_phy/include -I/home/pbuyo/apps/esp-idf/components/esp_phy/esp32/include -I/home/pbuyo/apps/esp-idf/components/vfs/include -I/home/pbuyo/apps/esp-idf/components/esp_netif/include -I/home/pbuyo/apps/esp-idf/components/wpa_supplicant/include -I/home/pbuyo/apps/esp-idf/components/wpa_supplicant/port/include -I/home/pbuyo/apps/esp-idf/components/wpa_supplicant/esp_supplicant/include -I/home/pbuyo/apps/esp-idf/components/esp_wifi/include -I/home/pbuyo/apps/esp-idf/components/unity/include -I/home/pbuyo/apps/esp-idf/components/unity/unity/src -I/home/pbuyo/apps/esp-idf/components/cmock/CMock/src -I/home/pbuyo/apps/esp-idf/components/console -I/home/pbuyo/apps/esp-idf/components/http_parser -I/home/pbuyo/apps/esp-idf/components/esp-tls -I/home/pbuyo/apps/esp-idf/components/esp-tls/esp-tls-crypto -I/home/pbuyo/apps/esp-idf/components/esp_adc/include -I/home/pbuyo/apps/esp-idf/components/esp_adc/interface -I/home/pbuyo/apps/esp-idf/components/esp_adc/esp32/include -I/home/pbuyo/apps/esp-idf/components/esp_adc/deprecated/include -I/home/pbuyo/apps/esp-idf/components/esp_eth/include -I/home/pbuyo/apps/esp-idf/components/esp_gdbstub/include -I/home/pbuyo/apps/esp-idf/components/esp_gdbstub/xtensa -I/home/pbuyo/apps/esp-idf/components/esp_gdbstub/esp32 -I/home/pbuyo/apps/esp-idf/components/esp_hid/include -I/home/pbuyo/apps/esp-idf/components/tcp_transport/include -I/home/pbuyo/apps/esp-idf/components/esp_http_client/include -I/home/pbuyo/apps/esp-idf/components/esp_http_server/include -I/home/pbuyo/apps/esp-idf/components/esp_https_ota/include -I/home/pbuyo/apps/esp-idf/components/esp_lcd/include -I/home/pbuyo/apps/esp-idf/components/esp_lcd/interface -I/home/pbuyo/apps/esp-idf/components/protobuf-c/protobuf-c -I/home/pbuyo/apps/esp-idf/components/protocomm/include/common -I/home/pbuyo/apps/esp-idf/components/protocomm/include/security -I/home/pbuyo/apps/esp-idf/components/protocomm/include/transports -I/home/pbuyo/apps/esp-idf/components/esp_local_ctrl/include -I/home/pbuyo/apps/esp-idf/components/esp_psram/include -I/home/pbuyo/apps/esp-idf/components/espcoredump/include -I/home/pbuyo/apps/esp-idf/components/espcoredump/include/port/xtensa -I/home/pbuyo/apps/esp-idf/components/wear_levelling/include -I/home/pbuyo/apps/esp-idf/components/sdmmc/include -I/home/pbuyo/apps/esp-idf/components/fatfs/diskio -I/home/pbuyo/apps/esp-idf/components/fatfs/vfs -I/home/pbuyo/apps/esp-idf/components/fatfs/src -I/home/pbuyo/apps/esp-idf/components/idf_test/include -I/home/pbuyo/apps/esp-idf/components/idf_test/include/esp32 -I/home/pbuyo/apps/esp-idf/components/ieee802154/include -I/home/pbuyo/apps/esp-idf/components/json/cJSON -I/home/pbuyo/apps/esp-idf/components/mqtt/esp-mqtt/include -I/home/pbuyo/apps/esp-idf/components/perfmon/include -I/home/pbuyo/apps/esp-idf/components/spiffs/include -I/home/pbuyo/apps/esp-idf/components/ulp/ulp_common/include -I/home/pbuyo/apps/esp-idf/components/ulp/ulp_common/include/esp32 -I/home/pbuyo/apps/esp-idf/components/wifi_provisioning/include -I/home/pbuyo/odevelopment/hotcoldhot/remote_real/components/esp32-owb/include -I/home/pbuyo/odevelopment/hotcoldhot/remote_real/components/esp32-ds18b20/include -mlongcalls -Wno-frame-address  -ffunction-sections -fdata-sections -Wall -Werror=all -Wno-error=unused-function -Wno-error=unused-variable -Wno-error=deprecated-declarations -Wextra -Wno-unused-parameter -Wno-sign-compare -Wno-enum-conversion -gdwarf-4 -ggdb -Og -fmacro-prefix-map=/home/pbuyo/odevelopment/hotcoldhot/remote_real=. -fmacro-prefix-map=/home/pbuyo/apps/esp-idf=/IDF -fstrict-volatile-bitfields -Wno-error=unused-but-set-variable -fno-jump-tables -fno-tree-switch-conversion -DconfigENABLE_FREERTOS_DEBUG_OCDAWARE=1 -std=gnu++20 -fno-exceptions -fno-rtti -D_GNU_SOURCE -DIDF_VER=\"v5.0.1\" -DESP_PLATFORM -D_POSIX_READER_WRITER_LOCKS -MD -MT esp-idf/main/CMakeFiles/__idf_main.dir/app_main.cpp.obj -MF esp-idf/main/CMakeFiles/__idf_main.dir/app_main.cpp.obj.d -o esp-idf/main/CMakeFiles/__idf_main.dir/app_main.cpp.obj -c /home/pbuyo/odevelopment/hotcoldhot/remote_real/main/app_main.cpp
+In file included from /home/pbuyo/odevelopment/hotcoldhot/remote_real/components/esp32-owb/include/owb_rmt.h:41,
+                 from /home/pbuyo/odevelopment/hotcoldhot/remote_real/components/esp32-owb/include/owb.h:330,
+                 from /home/pbuyo/odevelopment/hotcoldhot/remote_real/main/app_main.cpp:30:
+/home/pbuyo/apps/esp-idf/components/driver/deprecated/driver/rmt.h:18:2: warning: #warning "The legacy RMT driver is deprecated, please use driver/rmt_tx.h and/or driver/rmt_rx.h" [-Wcpp]
+   18 | #warning "The legacy RMT driver is deprecated, please use driver/rmt_tx.h and/or driver/rmt_rx.h"
+      |  ^~~~~~~
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/main/app_main.cpp:36:10: fatal error: board_devices.h: No such file or directory
+   36 | #include "board_devices.h"
+      |          ^~~~~~~~~~~~~~~~~
+compilation terminated.
+[3/8] Building CXX object esp-idf/main/CMakeFiles/__idf_main.dir/board_devices.cpp.obj
+FAILED: esp-idf/main/CMakeFiles/__idf_main.dir/board_devices.cpp.obj 
+/home/pbuyo/.espressif/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-g++ -DMBEDTLS_CONFIG_FILE=\"mbedtls/esp_config.h\" -DUNITY_INCLUDE_CONFIG_H -I/home/pbuyo/odevelopment/hotcoldhot/remote_real/build/config -I/home/pbuyo/odevelopment/hotcoldhot/remote_real/main -I/home/pbuyo/apps/esp-idf/components/newlib/platform_include -I/home/pbuyo/apps/esp-idf/components/freertos/FreeRTOS-Kernel/include -I/home/pbuyo/apps/esp-idf/components/freertos/esp_additions/include/freertos -I/home/pbuyo/apps/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/include -I/home/pbuyo/apps/esp-idf/components/freertos/esp_additions/include -I/home/pbuyo/apps/esp-idf/components/esp_hw_support/include -I/home/pbuyo/apps/esp-idf/components/esp_hw_support/include/soc -I/home/pbuyo/apps/esp-idf/components/esp_hw_support/include/soc/esp32 -I/home/pbuyo/apps/esp-idf/components/esp_hw_support/port/esp32/. -I/home/pbuyo/apps/esp-idf/components/esp_hw_support/port/esp32/private_include -I/home/pbuyo/apps/esp-idf/components/heap/include -I/home/pbuyo/apps/esp-idf/components/log/include -I/home/pbuyo/apps/esp-idf/components/soc/include -I/home/pbuyo/apps/esp-idf/components/soc/esp32/. -I/home/pbuyo/apps/esp-idf/components/soc/esp32/include -I/home/pbuyo/apps/esp-idf/components/hal/esp32/include -I/home/pbuyo/apps/esp-idf/components/hal/include -I/home/pbuyo/apps/esp-idf/components/hal/platform_port/include -I/home/pbuyo/apps/esp-idf/components/esp_rom/include -I/home/pbuyo/apps/esp-idf/components/esp_rom/include/esp32 -I/home/pbuyo/apps/esp-idf/components/esp_rom/esp32 -I/home/pbuyo/apps/esp-idf/components/esp_common/include -I/home/pbuyo/apps/esp-idf/components/esp_system/include -I/home/pbuyo/apps/esp-idf/components/esp_system/port/soc -I/home/pbuyo/apps/esp-idf/components/esp_system/port/include/private -I/home/pbuyo/apps/esp-idf/components/xtensa/include -I/home/pbuyo/apps/esp-idf/components/xtensa/esp32/include -I/home/pbuyo/apps/esp-idf/components/lwip/include -I/home/pbuyo/apps/esp-idf/components/lwip/include/apps -I/home/pbuyo/apps/esp-idf/components/lwip/include/apps/sntp -I/home/pbuyo/apps/esp-idf/components/lwip/lwip/src/include -I/home/pbuyo/apps/esp-idf/components/lwip/port/esp32/include -I/home/pbuyo/apps/esp-idf/components/lwip/port/esp32/include/arch -I/home/pbuyo/apps/esp-idf/components/esp_ringbuf/include -I/home/pbuyo/apps/esp-idf/components/efuse/include -I/home/pbuyo/apps/esp-idf/components/efuse/esp32/include -I/home/pbuyo/apps/esp-idf/components/driver/include -I/home/pbuyo/apps/esp-idf/components/driver/deprecated -I/home/pbuyo/apps/esp-idf/components/driver/esp32/include -I/home/pbuyo/apps/esp-idf/components/esp_pm/include -I/home/pbuyo/apps/esp-idf/components/mbedtls/port/include -I/home/pbuyo/apps/esp-idf/components/mbedtls/mbedtls/include -I/home/pbuyo/apps/esp-idf/components/mbedtls/mbedtls/library -I/home/pbuyo/apps/esp-idf/components/mbedtls/esp_crt_bundle/include -I/home/pbuyo/apps/esp-idf/components/esp_app_format/include -I/home/pbuyo/apps/esp-idf/components/bootloader_support/include -I/home/pbuyo/apps/esp-idf/components/bootloader_support/bootloader_flash/include -I/home/pbuyo/apps/esp-idf/components/esp_partition/include -I/home/pbuyo/apps/esp-idf/components/app_update/include -I/home/pbuyo/apps/esp-idf/components/spi_flash/include -I/home/pbuyo/apps/esp-idf/components/pthread/include -I/home/pbuyo/apps/esp-idf/components/esp_timer/include -I/home/pbuyo/apps/esp-idf/components/app_trace/include -I/home/pbuyo/apps/esp-idf/components/esp_event/include -I/home/pbuyo/apps/esp-idf/components/nvs_flash/include -I/home/pbuyo/apps/esp-idf/components/esp_phy/include -I/home/pbuyo/apps/esp-idf/components/esp_phy/esp32/include -I/home/pbuyo/apps/esp-idf/components/vfs/include -I/home/pbuyo/apps/esp-idf/components/esp_netif/include -I/home/pbuyo/apps/esp-idf/components/wpa_supplicant/include -I/home/pbuyo/apps/esp-idf/components/wpa_supplicant/port/include -I/home/pbuyo/apps/esp-idf/components/wpa_supplicant/esp_supplicant/include -I/home/pbuyo/apps/esp-idf/components/esp_wifi/include -I/home/pbuyo/apps/esp-idf/components/unity/include -I/home/pbuyo/apps/esp-idf/components/unity/unity/src -I/home/pbuyo/apps/esp-idf/components/cmock/CMock/src -I/home/pbuyo/apps/esp-idf/components/console -I/home/pbuyo/apps/esp-idf/components/http_parser -I/home/pbuyo/apps/esp-idf/components/esp-tls -I/home/pbuyo/apps/esp-idf/components/esp-tls/esp-tls-crypto -I/home/pbuyo/apps/esp-idf/components/esp_adc/include -I/home/pbuyo/apps/esp-idf/components/esp_adc/interface -I/home/pbuyo/apps/esp-idf/components/esp_adc/esp32/include -I/home/pbuyo/apps/esp-idf/components/esp_adc/deprecated/include -I/home/pbuyo/apps/esp-idf/components/esp_eth/include -I/home/pbuyo/apps/esp-idf/components/esp_gdbstub/include -I/home/pbuyo/apps/esp-idf/components/esp_gdbstub/xtensa -I/home/pbuyo/apps/esp-idf/components/esp_gdbstub/esp32 -I/home/pbuyo/apps/esp-idf/components/esp_hid/include -I/home/pbuyo/apps/esp-idf/components/tcp_transport/include -I/home/pbuyo/apps/esp-idf/components/esp_http_client/include -I/home/pbuyo/apps/esp-idf/components/esp_http_server/include -I/home/pbuyo/apps/esp-idf/components/esp_https_ota/include -I/home/pbuyo/apps/esp-idf/components/esp_lcd/include -I/home/pbuyo/apps/esp-idf/components/esp_lcd/interface -I/home/pbuyo/apps/esp-idf/components/protobuf-c/protobuf-c -I/home/pbuyo/apps/esp-idf/components/protocomm/include/common -I/home/pbuyo/apps/esp-idf/components/protocomm/include/security -I/home/pbuyo/apps/esp-idf/components/protocomm/include/transports -I/home/pbuyo/apps/esp-idf/components/esp_local_ctrl/include -I/home/pbuyo/apps/esp-idf/components/esp_psram/include -I/home/pbuyo/apps/esp-idf/components/espcoredump/include -I/home/pbuyo/apps/esp-idf/components/espcoredump/include/port/xtensa -I/home/pbuyo/apps/esp-idf/components/wear_levelling/include -I/home/pbuyo/apps/esp-idf/components/sdmmc/include -I/home/pbuyo/apps/esp-idf/components/fatfs/diskio -I/home/pbuyo/apps/esp-idf/components/fatfs/vfs -I/home/pbuyo/apps/esp-idf/components/fatfs/src -I/home/pbuyo/apps/esp-idf/components/idf_test/include -I/home/pbuyo/apps/esp-idf/components/idf_test/include/esp32 -I/home/pbuyo/apps/esp-idf/components/ieee802154/include -I/home/pbuyo/apps/esp-idf/components/json/cJSON -I/home/pbuyo/apps/esp-idf/components/mqtt/esp-mqtt/include -I/home/pbuyo/apps/esp-idf/components/perfmon/include -I/home/pbuyo/apps/esp-idf/components/spiffs/include -I/home/pbuyo/apps/esp-idf/components/ulp/ulp_common/include -I/home/pbuyo/apps/esp-idf/components/ulp/ulp_common/include/esp32 -I/home/pbuyo/apps/esp-idf/components/wifi_provisioning/include -I/home/pbuyo/odevelopment/hotcoldhot/remote_real/components/esp32-owb/include -I/home/pbuyo/odevelopment/hotcoldhot/remote_real/components/esp32-ds18b20/include -mlongcalls -Wno-frame-address  -ffunction-sections -fdata-sections -Wall -Werror=all -Wno-error=unused-function -Wno-error=unused-variable -Wno-error=deprecated-declarations -Wextra -Wno-unused-parameter -Wno-sign-compare -Wno-enum-conversion -gdwarf-4 -ggdb -Og -fmacro-prefix-map=/home/pbuyo/odevelopment/hotcoldhot/remote_real=. -fmacro-prefix-map=/home/pbuyo/apps/esp-idf=/IDF -fstrict-volatile-bitfields -Wno-error=unused-but-set-variable -fno-jump-tables -fno-tree-switch-conversion -DconfigENABLE_FREERTOS_DEBUG_OCDAWARE=1 -std=gnu++20 -fno-exceptions -fno-rtti -D_GNU_SOURCE -DIDF_VER=\"v5.0.1\" -DESP_PLATFORM -D_POSIX_READER_WRITER_LOCKS -MD -MT esp-idf/main/CMakeFiles/__idf_main.dir/board_devices.cpp.obj -MF esp-idf/main/CMakeFiles/__idf_main.dir/board_devices.cpp.obj.d -o esp-idf/main/CMakeFiles/__idf_main.dir/board_devices.cpp.obj -c /home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp
+In file included from /home/pbuyo/odevelopment/hotcoldhot/remote_real/components/esp32-owb/include/owb_rmt.h:41,
+                 from /home/pbuyo/odevelopment/hotcoldhot/remote_real/components/esp32-owb/include/owb.h:330,
+                 from /home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp:6:
+/home/pbuyo/apps/esp-idf/components/driver/deprecated/driver/rmt.h:18:2: warning: #warning "The legacy RMT driver is deprecated, please use driver/rmt_tx.h and/or driver/rmt_rx.h" [-Wcpp]
+   18 | #warning "The legacy RMT driver is deprecated, please use driver/rmt_tx.h and/or driver/rmt_rx.h"
+      |  ^~~~~~~
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp:10:22: warning: extra tokens at end of #include directive
+   10 | #include <time.h>    vTaskDelay(2000.0 / portTICK_PERIOD_MS);
+      |                      ^~~~~~~~~~
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp:14:5: error: 'owb' does not name a type
+   14 |     owb = owb_rmt_initialize(&rmt_driver_info, GPIO_DS18B20_0, RMT_CHANNEL_1, RMT_CHANNEL_0);
+      |     ^~~
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp:15:16: error: expected constructor, destructor, or type conversion before '(' token
+   15 |     owb_use_crc(owb, true);
+      |                ^
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp:17:11: error: expected constructor, destructor, or type conversion before '(' token
+   17 |     printf("Find devices:\n");
+      |           ^
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp:18:41: error: 'MAX_DEVICES' was not declared in this scope
+   18 |     OneWireBus_ROMCode device_rom_codes[MAX_DEVICES];
+      |                                         ^~~~~~~~~~~
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp:18:41: note: the macro 'MAX_DEVICES' had not yet been defined
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp:146: note: it was later defined here
+  146 | #define MAX_DEVICES          (8)
+      | 
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp:19:11: error: expected constructor, destructor, or type conversion before '(' token
+   19 |     memset(device_rom_codes, 0, sizeof(device_rom_codes));
+      |           ^
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp:23:11: error: expected constructor, destructor, or type conversion before '(' token
+   23 |     memset(&search_state, 0, sizeof(search_state));
+      |           ^
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp:25:21: error: expected constructor, destructor, or type conversion before '(' token
+   25 |     owb_search_first(owb, &search_state, &found);
+      |                     ^
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp:26:5: error: expected unqualified-id before 'while'
+   26 |     while (found)
+      |     ^~~~~
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp:35:11: error: expected constructor, destructor, or type conversion before '(' token
+   35 |     printf("Found %d device%s\n", num_devices, num_devices == 1 ? "" : "s");
+      |           ^
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp:37:5: error: expected unqualified-id before 'if'
+   37 |     if (num_devices == 1)
+      |     ^~
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp:53:5: error: expected unqualified-id before 'else'
+   53 |     else
+      |     ^~~~
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp:79:17: error: expected constructor, destructor, or type conversion before '(' token
+   79 |     ds18b20_init(ds18b20_info, owb, device_rom_codes[0]); // associate with bus and device
+      |                 ^
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp:80:20: error: expected constructor, destructor, or type conversion before '(' token
+   80 |     ds18b20_use_crc(ds18b20_info, true);           // enable CRC check on all reads
+      |                    ^
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp:81:27: error: expected constructor, destructor, or type conversion before '(' token
+   81 |     ds18b20_set_resolution(ds18b20_info, DS18B20_RESOLUTION);
+      |                           ^
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp:85:22: error: 'MAX_DEVICES' was not declared in this scope
+   85 |     int errors_count[MAX_DEVICES] = {0};
+      |                      ^~~~~~~~~~~
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp:85:22: note: the macro 'MAX_DEVICES' had not yet been defined
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp:146: note: it was later defined here
+  146 | #define MAX_DEVICES          (8)
+      | 
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp:87:5: error: expected unqualified-id before 'if'
+   87 |     if (num_devices > 0)
+      |     ^~
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp:128:5: error: expected unqualified-id before 'else'
+  128 |     else
+      |     ^~~~
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp:134:5: error: expected unqualified-id before 'for'
+  134 |     for (int i = 0; i < num_devices; ++i)
+      |     ^~~
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp:134:21: error: 'i' does not name a type
+  134 |     for (int i = 0; i < num_devices; ++i)
+      |                     ^
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp:134:38: error: expected unqualified-id before '++' token
+  134 |     for (int i = 0; i < num_devices; ++i)
+      |                                      ^~
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp:138:21: error: expected constructor, destructor, or type conversion before '(' token
+  138 |     owb_uninitialize(owb);
+      |                     ^
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp:140:11: error: expected constructor, destructor, or type conversion before '(' token
+  140 |     printf("Restarting now.\n");
+      |           ^
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp:141:11: error: expected constructor, destructor, or type conversion before '(' token
+  141 |     fflush(stdout);
+      |           ^
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp:142:15: error: expected constructor, destructor, or type conversion before '(' token
+  142 |     vTaskDelay(1000 / portTICK_PERIOD_MS);
+      |               ^
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp:143:18: error: expected constructor, destructor, or type conversion before ';' token
+  143 |     esp_restart();
+      |                  ^
+In file included from /home/pbuyo/apps/esp-idf/components/freertos/esp_additions/include/freertos/FreeRTOSConfig.h:10,
+                 from /home/pbuyo/apps/esp-idf/components/freertos/FreeRTOS-Kernel/include/freertos/FreeRTOS.h:64,
+                 from /home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp:1:
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp: In function 'void run()':
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/build/config/sdkconfig.h:230:30: error: invalid conversion from 'int' to 'gpio_num_t' [-fpermissive]
+  230 | #define CONFIG_ONE_WIRE_GPIO 4
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp:145:31: note: in expansion of macro 'CONFIG_ONE_WIRE_GPIO'
+  145 | #define GPIO_DS18B20_0       (CONFIG_ONE_WIRE_GPIO)
+      |                               ^~~~~~~~~~~~~~~~~~~~
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp:158:52: note: in expansion of macro 'GPIO_DS18B20_0'
+  158 |         owb = owb_rmt_initialize(&rmt_driver_info, GPIO_DS18B20_0, RMT_CHANNEL_1, RMT_CHANNEL_0);
+      |                                                    ^~~~~~~~~~~~~~
+In file included from /home/pbuyo/odevelopment/hotcoldhot/remote_real/components/esp32-owb/include/owb.h:330,
+                 from /home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp:6:
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/components/esp32-owb/include/owb_rmt.h:68:71: note:   initializing argument 2 of 'OneWireBus* owb_rmt_initialize(owb_rmt_driver_info*, gpio_num_t, rmt_channel_t, rmt_channel_t)'
+   68 | OneWireBus* owb_rmt_initialize(owb_rmt_driver_info * info, gpio_num_t gpio_num,
+      |                                                            ~~~~~~~~~~~^~~~~~~~
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp:250:26: error: format '%d' expects argument of type 'int', but argument 2 has type 'long unsigned int' [-Werror=format=]
+  250 |                 printf("%d,%.1f,%d|\n", t, temp, errors);
+      |                         ~^              ~
+      |                          |              |
+      |                          int            long unsigned int
+      |                         %ld
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp:263:27: error: 'devices' was not declared in this scope; did you mean 'num_devices'?
+  263 |             ds18b20_free(&devices[i]);
+      |                           ^~~~~~~
+      |                           num_devices
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp:232:13: warning: unused variable 'sample_count' [-Wunused-variable]
+  232 |         int sample_count = 0;
+      |             ^~~~~~~~~~~~
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp: At global scope:
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp:273:1: error: 'board_devices' does not name a type
+  273 | board_devices::board_devices()
+      | ^~~~~~~~~~~~~
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp:278:9: error: 'board_devices' has not been declared
+  278 | int64_t board_devices::time_us()
+      |         ^~~~~~~~~~~~~
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp:283:6: error: 'board_devices' has not been declared
+  283 | void board_devices::set_peltier_duty_100(float)
+      |      ^~~~~~~~~~~~~
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp:286:7: error: 'board_devices' has not been declared
+  286 | float board_devices::get_sensor_temp()
+      |       ^~~~~~~~~~~~~
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp: In function 'float get_sensor_temp()':
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp:287:2: error: no return statement in function returning non-void [-Werror=return-type]
+  287 | {}
+      |  ^
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp: At global scope:
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp:289:6: error: 'board_devices' has not been declared
+  289 | void board_devices::loop()
+      |      ^~~~~~~~~~~~~
+/home/pbuyo/odevelopment/hotcoldhot/remote_real/main/board_devices.cpp:150:13: warning: 'void run()' defined but not used [-Wunused-function]
+  150 | static void run()
+      |             ^~~
+cc1plus: some warnings being treated as errors
+ninja: build stopped: subcommand failed.

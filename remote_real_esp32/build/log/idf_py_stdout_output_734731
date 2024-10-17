@@ -1,0 +1,77 @@
+[1/5] cd /home/pbuyo/odevelopment/hotcoldhot/remote_real/build/esp-idf/esptool_py && /home/pbuyo/.espressif/python_env/idf5.0_py3.10_env/bin/python /home/pbuyo/apps/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 partition --type app /home/pbuyo/odevelopment/hotcoldhot/remote_real/build/partition_table/partition-table.bin /home/pbuyo/odevelopment/hotcoldhot/remote_real/build/temp_sense.bin
+temp_sense.bin binary size 0xfd910 bytes. Smallest app partition is 0x100000 bytes. 0x26f0 bytes (1%) free.
+Warning: The smallest app partition is nearly full (1% free space left)!
+[2/5] Performing build step for 'bootloader'
+[1/1] cd /home/pbuyo/odevelopment/hotcoldhot/remote_real/build/bootloader/esp-idf/esptool_py && /home/pbuyo/.espressif/python_env/idf5.0_py3.10_env/bin/python /home/pbuyo/apps/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 bootloader 0x1000 /home/pbuyo/odevelopment/hotcoldhot/remote_real/build/bootloader/bootloader.bin
+Bootloader binary size 0x6700 bytes. 0x900 bytes (8%) free.
+[2/3] cd /home/pbuyo/apps/esp-idf/components/esptool_py && /usr/bin/cmake -D IDF_PATH=/home/pbuyo/apps/esp-idf -D "SERIAL_TOOL=/home/pbuyo/.espressif/python_env/idf5.0_py3.10_env/bin/python;;/home/pbuyo/apps/esp-idf/components/esptool_py/esptool/esptool.py;--chip;esp32" -D "SERIAL_TOOL_ARGS=--before=default_reset;--after=hard_reset;write_flash;@flash_args" -D WORKING_DIRECTORY=/home/pbuyo/odevelopment/hotcoldhot/remote_real/build -P /home/pbuyo/apps/esp-idf/components/esptool_py/run_serial_tool.cmake
+esptool.py --chip esp32 -p /dev/ttyACM0 -b 460800 --before=default_reset --after=hard_reset write_flash --flash_mode dio --flash_freq 40m --flash_size 2MB 0x1000 bootloader/bootloader.bin 0x10000 temp_sense.bin 0x8000 partition_table/partition-table.bin
+esptool.py v4.7.0
+Serial port /dev/ttyACM0
+Connecting....
+Chip is ESP32-D0WD-V3 (revision v3.0)
+Features: WiFi, BT, Dual Core, 240MHz, VRef calibration in efuse, Coding Scheme None
+Crystal is 40MHz
+MAC: 3c:e9:0e:8b:93:18
+Uploading stub...
+Running stub...
+Stub running...
+Changing baud rate to 460800
+Changed.
+Configuring flash size...
+Flash will be erased from 0x00001000 to 0x00007fff...
+Flash will be erased from 0x00010000 to 0x0010dfff...
+Flash will be erased from 0x00008000 to 0x00008fff...
+Compressed 26368 bytes to 16444...
+Writing at 0x00001000... (50 %)
+Writing at 0x000076b1... (100 %)
+Wrote 26368 bytes (16444 compressed) at 0x00001000 in 0.5 seconds (effective 392.8 kbit/s)...
+Hash of data verified.
+Compressed 1038608 bytes to 607738...
+Writing at 0x00010000... (2 %)
+Writing at 0x0001c1f0... (5 %)
+Writing at 0x0002576c... (7 %)
+Writing at 0x0002ac9b... (10 %)
+Writing at 0x00033b6e... (13 %)
+Writing at 0x00046c48... (15 %)
+Writing at 0x0004e513... (18 %)
+Writing at 0x00053f1b... (21 %)
+Writing at 0x00059722... (23 %)
+Writing at 0x0005f7b4... (26 %)
+Writing at 0x00064f2c... (28 %)
+Writing at 0x0006a548... (31 %)
+Writing at 0x0006fd81... (34 %)
+Writing at 0x000756c2... (36 %)
+Writing at 0x0007b487... (39 %)
+Writing at 0x00081104... (42 %)
+Writing at 0x000863f4... (44 %)
+Writing at 0x0008b8cc... (47 %)
+Writing at 0x00090b7c... (50 %)
+Writing at 0x00096232... (52 %)
+Writing at 0x0009b82e... (55 %)
+Writing at 0x000a0f81... (57 %)
+Writing at 0x000a6e34... (60 %)
+Writing at 0x000ac75f... (63 %)
+Writing at 0x000b2331... (65 %)
+Writing at 0x000b8515... (68 %)
+Writing at 0x000c0808... (71 %)
+Writing at 0x000c90cf... (73 %)
+Writing at 0x000d286f... (76 %)
+Writing at 0x000d80b8... (78 %)
+Writing at 0x000dd72a... (81 %)
+Writing at 0x000e5109... (84 %)
+Writing at 0x000ecd05... (86 %)
+Writing at 0x000f527e... (89 %)
+Writing at 0x000fc398... (92 %)
+Writing at 0x00101fb1... (94 %)
+Writing at 0x00107a98... (97 %)
+Writing at 0x0010ce11... (100 %)
+Wrote 1038608 bytes (607738 compressed) at 0x00010000 in 13.8 seconds (effective 604.2 kbit/s)...
+Hash of data verified.
+Compressed 3072 bytes to 103...
+Writing at 0x00008000... (100 %)
+Wrote 3072 bytes (103 compressed) at 0x00008000 in 0.0 seconds (effective 1261.3 kbit/s)...
+Hash of data verified.
+
+Leaving...
+Hard resetting via RTS pin...

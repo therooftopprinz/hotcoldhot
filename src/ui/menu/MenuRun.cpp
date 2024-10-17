@@ -2,6 +2,7 @@
 #include "string_utils.hpp"
 #include <cmath>
 #include <fstream>
+#include <configmap.hpp>
 
 namespace ui
 {
@@ -21,16 +22,16 @@ MenuRun::MenuRun(UI& ui, IApp& app, MenuProgram& program, TabView* parent)
     constexpr int chart_width = ((CONFIG_SCREEN_WIDTH * 6.5) / 10 - CPAD);
     /*Create a container with grid*/
     static lv_coord_t col_dsc[] = {
-        (int(CONFIG_SCREEN_WIDTH * 1.095) / 10 - CPAD), // 0 chart1
-        (int(CONFIG_SCREEN_WIDTH * 1.095) / 10 - CPAD), // 1 chart2
-        (int(CONFIG_SCREEN_WIDTH * 1.095) / 10 - CPAD), // 2 chart3
-        (int(CONFIG_SCREEN_WIDTH * 1.095) / 10 - CPAD), // 3 chart4
-        (int(CONFIG_SCREEN_WIDTH * 1.095) / 10 - CPAD), // 4 chart5
-        (int(CONFIG_SCREEN_WIDTH * 1.095) / 10 - CPAD), // 5 chart6
-        (int(CONFIG_SCREEN_WIDTH * 0.980) / 10 - CPAD), // 6 Text1
-        (int(CONFIG_SCREEN_WIDTH * 0.750) / 10 - CPAD), // 7 Text2
-        (int(CONFIG_SCREEN_WIDTH * 0.750) / 10 - CPAD), // 8 Text3
-        (int(CONFIG_SCREEN_WIDTH * 0.750) / 10 - CPAD), // 9 Text4
+        (int(CONFIG_SCREEN_WIDTH * 1.10) / 10 - CPAD), // 0 chart1
+        (int(CONFIG_SCREEN_WIDTH * 1.10) / 10 - CPAD), // 1 chart2
+        (int(CONFIG_SCREEN_WIDTH * 1.10) / 10 - CPAD), // 2 chart3
+        (int(CONFIG_SCREEN_WIDTH * 1.10) / 10 - CPAD), // 3 chart4
+        (int(CONFIG_SCREEN_WIDTH * 1.10) / 10 - CPAD), // 4 chart5
+        (int(CONFIG_SCREEN_WIDTH * 1.10) / 10 - CPAD), // 5 chart6
+        (int(CONFIG_SCREEN_WIDTH * 0.95) / 10 - CPAD), // 6 Text1
+        (int(CONFIG_SCREEN_WIDTH * 0.75) / 10 - CPAD), // 7 Text2
+        (int(CONFIG_SCREEN_WIDTH * 0.75) / 10 - CPAD), // 8 Text3
+        (int(CONFIG_SCREEN_WIDTH * 0.75) / 10 - CPAD), // 9 Text4
         LV_GRID_TEMPLATE_LAST};
     static lv_coord_t row_dsc[] = {
         CONFIG_SCREEN_LINE_HEIGHT - RPAD, // 0
@@ -411,9 +412,14 @@ void MenuRun::onClickScrollMinus(lv_event_t* e)
     if (e->code == LV_EVENT_CLICKED)
     {
         this_->scrollZoomLevel += 1;
-        if (this_->scrollZoomLevel >= 9)
+        configmap cm;
+        cm.load(FS_PREFIX "/config.cfg");
+        auto& cfg = cm.get();
+        int z  = cm.at_or("ZOOM_Max","6").as<unsigned>();
+
+        if (this_->scrollZoomLevel >= z)
         {
-            this_->scrollZoomLevel = 9;
+            this_->scrollZoomLevel = z;
         }
         LV_LOG_USER("MenuRun | zoom: %lf", pow(2,this_->scrollZoomLevel));
         this_->updateZoom();

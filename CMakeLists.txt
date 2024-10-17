@@ -45,6 +45,7 @@ file(GLOB SRC
     "${PROJECT_DIR}/src/ui/GlobalStyles.cpp"
     "${PROJECT_DIR}/src/ui/menu/MenuProgram.cpp"
     "${PROJECT_DIR}/src/ui/menu/MenuRun.cpp"
+    "${PROJECT_DIR}/src/ui/menu/MenuSettings.cpp"
     "${PROJECT_DIR}/src/arduino.cpp"
     "${PROJECT_DIR}/sim_components/main.cpp"
     "${PROJECT_DIR}/sim_components/display_manager/src/display_manager.c"

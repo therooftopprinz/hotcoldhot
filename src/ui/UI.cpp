@@ -66,14 +66,14 @@ void UI::initUI()
     auto menu_cnt = menu->getContent<Object>();
     menu_cnt->setWidth(CONFIG_SCREEN_WIDTH);
     menu_cnt->setHeight(CONFIG_SCREEN_HEIGHT-CONFIG_SCREEN_LINE_HEIGHT - RPAD);
-    menu_cnt->setStylePadAll(5);
+    menu_cnt->setStylePadAll(0);
     menu_cnt->clearFlag(LV_OBJ_FLAG_SCROLLABLE);
     // lv_obj_set_style_border_width(menu_cnt, 1, LV_STATE_DEFAULT);
     // lv_obj_set_style_border_color(menu_cnt, lv_color_hex(0xFF0000), LV_STATE_DEFAULT);
 
     menuProgram = std::make_unique<MenuProgram>(*this, menu);
     menuRun = std::make_unique<MenuRun>(*this, app, *menuProgram, menu);
-    menu->addTab("Settings");
+    menuSettings = std::make_unique<MenuSettings>(*this, menu);
     menu->addTab("Help");
 
     MessageBoxBuilder(group)

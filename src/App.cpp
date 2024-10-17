@@ -45,6 +45,7 @@ void App::loadCfg()
     kPidI  = cm.at_or("PID_I","0").as<double>();
     kPidD  = cm.at_or("PID_D","0").as<double>();
     kPidTau = cm.at_or("PID_U","1").as<double>();
+    kPidS = cm.at_or("PID_S","1").as<double>();
     kPidLoopRate = cm.at_or("PID_Rate","0.2").as<double>();
 }
 
@@ -136,7 +137,7 @@ void App::updateTarget(double dt)
 
     printPID++;
 
-    dev.set_peltier_duty_100(pwm);
+    dev.set_peltier_duty_100(pwm*kPidS);
 }
 
 bool App::start(const program_t& p)
