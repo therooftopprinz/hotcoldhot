@@ -1,0 +1,1 @@
+cmd='/usr/bin/cmake;-DSDKCONFIG=/home/pbuyo/odevelopment/hotcoldhot_esp32_test/temp_sense/sdkconfig;-DIDF_PATH=/home/pbuyo/apps/esp-idf;-DIDF_TARGET=esp32;-DPYTHON_DEPS_CHECKED=1;-DPYTHON=python;-DEXTRA_COMPONENT_DIRS=/home/pbuyo/apps/esp-idf/components/bootloader;-DPROJECT_SOURCE_DIR=/home/pbuyo/odevelopment/hotcoldhot_esp32_test/temp_sense;-GNinja;<SOURCE_DIR><SOURCE_SUBDIR>'
